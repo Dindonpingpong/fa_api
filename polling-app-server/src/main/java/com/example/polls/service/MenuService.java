@@ -43,7 +43,7 @@ public class MenuService {
 
         List<Long> menuIds = menus.map(Menu::getId).getContent();
 
-        List<Composition> compositionList = compositionRepository.findByMenu_Id(menuIds);
+        List<Composition> compositionList = compositionRepository.findByMenu_IdIn(menuIds);
 
         Set<Long> productSet = getProductsId(compositionList);
 
@@ -71,7 +71,7 @@ public class MenuService {
     }
 
     private Map<Long, String> getProductsMap(Set<Long> productSet) {
-        List<Product> productList = productRepository.findById(productSet);
+        List<Product> productList = productRepository.findByIdIn(productSet);
 
         return productList.stream().collect(Collectors.toMap(Product::getId, Product::getName));
     }

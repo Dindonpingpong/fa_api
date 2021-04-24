@@ -10,5 +10,5 @@ import java.util.Optional;
 @Repository
 public interface CompositionRepository extends JpaRepository<Composition, Long> {
     List<Composition> findByProduct_id(Long id);
-    List<Composition> findByMenu_Id(List<Long> listId);
+    List<Composition> findByMenu_IdIn(List<Long> listId);
 }

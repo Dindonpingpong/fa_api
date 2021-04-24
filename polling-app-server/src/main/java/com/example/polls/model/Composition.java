@@ -8,7 +8,7 @@ import java.awt.*;
 
 @Data
 @Entity
-@Table(name="composition")
+@Table(name = "composition")
 @Setter
 public class Composition {
     @Id
@@ -20,8 +20,8 @@ public class Composition {
         this.menu = menu;
     }
 
-    public Composition() {}
-
+    public Composition() {
+    }
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "product_id")
@@ -29,7 +29,7 @@ public class Composition {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "menu_id")
-    private Menu menu ;
+    private Menu menu;
 
     @Override
     public String toString() {
