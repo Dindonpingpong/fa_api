@@ -44,17 +44,6 @@ public class MenuService {
             updatedMenu.setPrice(menuRequest.getPrice());
             updatedMenu.setWeight(menuRequest.getWeight());
             updatedMenu.setStatus(menuRequest.isStatus());
-            updatedMenu.setCompositions(null);
-
-            Set<Composition> updatedCompositionList = new HashSet<>();
-
-            menuRequest.getProductResponseList().forEach(productResponse -> {
-                updatedCompositionList.add(new Composition(productRepository.findById(productResponse.getId()).get(),updatedMenu));
-            });
-
-            compositionRepository.deleteByMenu_id(Id);
-
-            compositionRepository.saveAll(updatedCompositionList);
 
             menuRepository.save(updatedMenu);
 

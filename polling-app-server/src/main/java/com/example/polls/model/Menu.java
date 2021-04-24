@@ -31,6 +31,9 @@ public class Menu {
     @OneToMany(mappedBy = "menu")
     private Set<Composition> compositions;
 
+    @OneToMany(mappedBy = "menu")
+    Set<Order_items> order_itemsSet;
+
     @Override
     public String toString() {
         return "Menu{" +
