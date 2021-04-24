@@ -11,7 +11,6 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 public class OrderRequest {
-    private LocalDate orderDate;
     private Long clientId;
-    private List<MenuResponse> menuResponseList;
+    private List<OrderMenuRequest> orderMenuRequestList;
 }

@@ -16,6 +16,10 @@ public class Order_items {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private int quantity;
+
+    private int subtotal;
+
     @ManyToOne(fetch = EAGER)
     @JoinColumn(name = "menu_id")
     private Menu menu;
@@ -26,9 +30,11 @@ public class Order_items {
 
     public Order_items() {};
 
-    public Order_items(Order order, Menu menu) {
-        this.order = order;
+    public Order_items(Menu menu, Order order, int quantity, int subtotal) {
         this.menu = menu;
+        this.order = order;
+        this.quantity = quantity;
+        this.subtotal = subtotal;
     }
 
     @Override

@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -32,7 +33,7 @@ public class Menu {
     private Set<Composition> compositions;
 
     @OneToMany(mappedBy = "menu")
-    Set<Order_items> order_itemsSet;
+    Set<Order_items> order_itemsSet = new HashSet<>();
 
     @Override
     public String toString() {
