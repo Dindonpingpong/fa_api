@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "orders")
@@ -16,11 +17,9 @@ public class Order {
 
     private String status;
 
-    public Order(){};
+    private LocalDate orderDate;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "basket_id")
-    private Basket basket;
+    public Order(){};
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "employee_id")

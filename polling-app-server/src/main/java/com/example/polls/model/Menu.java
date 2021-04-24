@@ -29,9 +29,6 @@ public class Menu {
     }
 
     @OneToMany(mappedBy = "menu")
-    private Set<BasketGoods> basketGoodsSet;
-
-    @OneToMany(mappedBy = "menu")
     private Set<Composition> compositions;
 
     @Override

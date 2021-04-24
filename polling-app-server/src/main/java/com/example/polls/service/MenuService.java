@@ -3,9 +3,7 @@ package com.example.polls.service;
 import com.example.polls.model.Composition;
 import com.example.polls.model.Menu;
 import com.example.polls.model.Product;
-import com.example.polls.payload.MenuResponse;
-import com.example.polls.payload.PagedResponse;
-import com.example.polls.payload.ProductResponse;
+import com.example.polls.payload.*;
 import com.example.polls.repository.CompositionRepository;
 import com.example.polls.repository.MenuRepository;
 import com.example.polls.repository.ProductRepository;
@@ -23,6 +21,7 @@ import static org.springframework.data.domain.Sort.Direction.DESC;
 
 @Service
 public class MenuService {
+
     @Autowired
     MenuRepository menuRepository;
 
@@ -32,13 +31,46 @@ public class MenuService {
     @Autowired
     ProductRepository productRepository;
 
+    public Optional<Menu> getMenuById(Long Id) {
+        return menuRepository.findById(Id);
+    }
+
+    public ApiResponse updateMenu(Long Id, MenuRequest menuRequest) {
+        Optional<Menu> menuFromDb = menuRepository.findById(Id);
+
+        if (menuFromDb.isPresent()) {
+            Menu updatedMenu = menuFromDb.get();
+            updatedMenu.setName(menuRequest.getName());
+            updatedMenu.setPrice(menuRequest.getPrice());
+            updatedMenu.setWeight(menuRequest.getWeight());
+            updatedMenu.setStatus(menuRequest.isStatus());
+            updatedMenu.setCompositions(null);
+
+            Set<Composition> updatedCompositionList = new HashSet<>();
+
+            menuRequest.getProductResponseList().forEach(productResponse -> {
+                updatedCompositionList.add(new Composition(productRepository.findById(productResponse.getId()).get(),updatedMenu));
+            });
+
+            compositionRepository.deleteByMenu_id(Id);
+
+            compositionRepository.saveAll(updatedCompositionList);
+
+            menuRepository.save(updatedMenu);
+
+            return new ApiResponse(true, "Menu updated");
+        } else {
+            return new ApiResponse(false, "Menu not found");
+        }
+    }
+
     public PagedResponse<MenuResponse> getAllMenu(int page, int size, boolean sortDesc) {
         var sort = (sortDesc) ? DESC : ASC;
-        Pageable pageable = PageRequest.of(page, size, sort);
+        Pageable pageable = PageRequest.of(page, size, sort, "name");
         Page<Menu> menus = menuRepository.findAll(pageable);
 
         if (menus.isEmpty()) {
-            return new PagedResponse<>(Collections.emptyList(), page, size,0, 0,false);
+            return new PagedResponse<>(Collections.emptyList(), page, size, 0, 0, false);
         }
 
         List<Long> menuIds = menus.map(Menu::getId).getContent();
@@ -49,9 +81,9 @@ public class MenuService {
 
         Map<Long, String> productsMap = getProductsMap(productSet);
 
-        List<MenuResponse> menuResponses = getListMenuResponses(menus, compositionList, productsMap);
+        List<MenuResponse> menuResponse = getListMenuResponses(menus, compositionList, productsMap);
 
-        return null;
+        return new PagedResponse<>(menuResponse, menus.getNumber(), menus.getSize(), menus.getTotalElements(), menus.getTotalPages(), menus.isLast());
     }
 
     private List<MenuResponse> getListMenuResponses(Page<Menu> menus, List<Composition> compositionList, Map<Long, String> productsMap) {
@@ -77,7 +109,7 @@ public class MenuService {
     }
 
     private Set<Long> getProductsId(List<Composition> compositionList) {
-        Set <Long> productsId = new HashSet<>();
+        Set<Long> productsId = new HashSet<>();
 
         compositionList.forEach(composition -> productsId.add(composition.getMenu().getId()));
 

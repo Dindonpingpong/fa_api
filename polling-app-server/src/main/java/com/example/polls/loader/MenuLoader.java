@@ -1,6 +1,7 @@
 package com.example.polls.loader;
 
 import com.example.polls.model.Menu;
+import com.example.polls.model.Product;
 import com.example.polls.repository.MenuRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
