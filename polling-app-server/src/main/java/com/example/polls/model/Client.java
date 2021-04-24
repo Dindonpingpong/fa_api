@@ -21,7 +21,6 @@ import java.util.Set;
 })
 @Getter
 @Setter
-@AllArgsConstructor
 public class Client extends DateAudit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
