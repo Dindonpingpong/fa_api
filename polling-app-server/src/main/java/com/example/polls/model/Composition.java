@@ -1,6 +1,7 @@
 package com.example.polls.model;
 
 import lombok.Data;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.awt.*;
@@ -8,6 +9,7 @@ import java.awt.*;
 @Data
 @Entity
 @Table(name="composition")
+@Setter
 public class Composition {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,14 +21,6 @@ public class Composition {
     }
 
     public Composition() {}
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
 
     @ManyToOne(fetch = FetchType.EAGER)
