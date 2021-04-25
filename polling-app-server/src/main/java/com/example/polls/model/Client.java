@@ -53,6 +53,10 @@ public class Client extends DateAudit {
 
     }
 
+    public void addOrderItem(Order order) {
+        this.orders.add(order);
+    }
+
     public Client(String firstName, String lastName, String username, String email, String password) {
         this.firstName = firstName;
         this.lastName = lastName;

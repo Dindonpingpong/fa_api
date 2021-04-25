@@ -1,5 +1,6 @@
 package com.example.polls.controller;
 
+import com.example.polls.model.Menu;
 import com.example.polls.payload.MenuRequest;
 import com.example.polls.payload.MenuResponse;
 import com.example.polls.payload.PagedResponse;
@@ -22,9 +23,8 @@ public class MenuController {
     @GetMapping
     @PreAuthorize("hasRole('USER')")
     public PagedResponse<MenuResponse> getMenu(@RequestParam(value = "page", defaultValue = DEFAULT_PAGE_NUMBER) int page,
-                                               @RequestParam(value = "size", defaultValue = DEFAULT_PAGE_SIZE) int size,
-                                               @RequestParam(value = "sort", defaultValue = DEFAULT_SORT_TYPE) String sortType) {
-        boolean sortDesc = sortType.equalsIgnoreCase("desc");
+                                       @RequestParam(value = "size", defaultValue = DEFAULT_PAGE_SIZE) int size,
+                                       @RequestParam(value = "sort", defaultValue = DEFAULT_SORT_TYPE) boolean sortDesc) {
         return menuService.getAllMenu(page,size,sortDesc);
     }
 

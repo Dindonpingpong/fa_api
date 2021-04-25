@@ -36,25 +36,34 @@ public class OrderService {
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    Order_ItemsRepository order_itemsRepository;
+
     public ResponseEntity createOrder(OrderRequest orderRequest) {
         try {
             Client client = userRepository.getOne(orderRequest.getClientId());
 
-            Order order = new Order(LocalDate.now(), client);
+            Order order = new Order(LocalDate.now());
+
+            client.addOrderItem(order);
+            order.setClient(client);
+            userRepository.save(client);
 
             Set<Order_items> orderItems = new HashSet<>();
 
             orderRequest.getOrderMenuRequestList().forEach(menuOrder -> {
                 Menu curMenu = menuRepository.getOne(menuOrder.getId());
-                orderItems.add(new Order_items(curMenu,order,menuOrder.getQuantity(),menuOrder.getSubtotal()));
+                Order_items order_items = new Order_items(curMenu,order,menuOrder.getQuantity(),menuOrder.getSubtotal());
+                orderItems.add(order_items);
             });
 
             order.setOrder_itemsSet(orderItems);
-            orderRepository.save(order);
 
+            orderRepository.save(order);
+            order_itemsRepository.saveAll(orderItems);
             return new ResponseEntity(new ApiResponse(true,"Order created"), CREATED);
         } catch (Exception e) {
-            return new ResponseEntity(new ApiResponse(false,"Order did not create"), CONFLICT);
+            return new ResponseEntity(new ApiResponse(false,e.getMessage()), CONFLICT);
         }
     }
 }

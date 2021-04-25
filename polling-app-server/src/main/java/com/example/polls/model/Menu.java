@@ -7,6 +7,8 @@ import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
+import static javax.persistence.FetchType.LAZY;
+
 @Entity
 @Table(name = "menu")
 @Getter
@@ -29,8 +31,12 @@ public class Menu {
         this.status = status;
     }
 
-    @OneToMany(mappedBy = "menu")
-    private Set<Composition> compositions;
+    @ManyToMany(fetch = LAZY)
+    @JoinTable(
+            name = "menu_product",
+            joinColumns = @JoinColumn(name = "menu_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id", referencedColumnName = "id"))
+    private Set<Product> productSet = new HashSet<>();
 
     @OneToMany(mappedBy = "menu")
     Set<Order_items> order_itemsSet = new HashSet<>();

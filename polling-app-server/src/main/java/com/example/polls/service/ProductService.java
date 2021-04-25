@@ -1,17 +1,14 @@
 package com.example.polls.service;
 
-import com.example.polls.model.Composition;
 import com.example.polls.model.Product;
 import com.example.polls.payload.ApiResponse;
 import com.example.polls.payload.PagedResponse;
 import com.example.polls.payload.ProductResponse;
-import com.example.polls.repository.CompositionRepository;
 import com.example.polls.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -24,9 +21,6 @@ public class ProductService {
 
     @Autowired
     private ProductRepository productRepository;
-
-    @Autowired
-    private CompositionRepository compositionRepository;
 
     public void createProduct(Product product) {
         productRepository.save(product);
@@ -59,17 +53,6 @@ public class ProductService {
             return new ApiResponse(true, "Product updated");
         } else {
             return new ApiResponse(false, "Product not found");
-        }
-    }
-
-    public ApiResponse deleteById(Long id) {
-        List<Composition> compositionList = compositionRepository.findByProduct_id(id);
-
-        if (compositionList.isEmpty()) {
-            productRepository.deleteById(id);
-            return new ApiResponse(true, "Product deleted");
-        } else {
-            return new ApiResponse(false, "Product can't be deleted");
         }
     }
 }

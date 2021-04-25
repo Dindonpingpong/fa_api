@@ -26,7 +26,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
@@ -62,7 +64,16 @@ public class AuthController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         String jwt = tokenProvider.generateToken(authentication);
-        return ResponseEntity.ok(new JwtAuthenticationResponse(jwt));
+
+        List<String> roles = new ArrayList<>();
+
+        userRepository
+                .findByUsernameOrEmail(loginRequest.getUsernameOrEmail(), loginRequest.getUsernameOrEmail())
+                .get()
+                .getRoles()
+                .forEach(role -> roles.add(role.getName().toString()));
+
+        return ResponseEntity.ok(new JwtAuthenticationResponse(jwt, roles));
     }
 
     @PostMapping("/signup")

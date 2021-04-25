@@ -16,8 +16,9 @@ public class Product {
     private Long id;
 
     private String name;
-    @OneToMany(mappedBy = "product")
-    private Set<Composition> compositions;
+
+    @ManyToMany(mappedBy = "productSet")
+    Set<Menu> menuSet;
 
     public Product() {
     }

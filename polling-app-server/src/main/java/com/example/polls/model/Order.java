@@ -23,9 +23,8 @@ public class Order {
 
     public Order(){};
 
-    public Order(LocalDate orderDate, Client client) {
+    public Order(LocalDate orderDate) {
         this.orderDate = orderDate;
-        this.client = client;
     }
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -38,6 +37,10 @@ public class Order {
 
     @OneToMany(mappedBy = "order")
     Set<Order_items> order_itemsSet;
+
+    public void addOrderItem(Order_items orderItem) {
+        this.order_itemsSet.add(orderItem);
+    }
 
     @Override
     public String toString() {
