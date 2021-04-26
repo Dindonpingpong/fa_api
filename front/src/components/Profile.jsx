@@ -9,13 +9,20 @@ const InputForm = (props) => {
         <Col>
             <FormGroup>
                 <Label className="font-profile-head">
-                    {text}
-                    <Input
-                        type={type}
-                        name={name}
-                        onChange={e => set(e.target.value)}
-                        required
-                    />
+                    <Row>
+                        <Col>
+                            {text}
+                        </Col>
+                        <Col>
+                            <Input
+                                type={type}
+                                name={name}
+                                onChange={e => set(e.target.value)}
+                                defaultValue="fds"
+                                required
+                            />
+                        </Col>
+                    </Row>
                 </Label>
             </FormGroup>
         </Col>
@@ -30,13 +37,7 @@ const Profile = (props) => {
     const [login, setLogin] = useState();
     const [password, setPassword] = useState();
 
-    const handleOauth = (e) => {
-        if (names.includes(e.target.name)) {
-            window.open(`http://localhost:5000/api/auth/${e.target.name}`, "_self");
-        }
-    }
-
-    const submit = () => {  };
+    const submit = () => { };
 
     if (username && hash) {
         const data = {

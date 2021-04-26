@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams, withRouter } from 'react-router-dom';
-import { Card, CardBody, Container, Row, Col, Button, FormGroup, Label, Input, NavLink, ListGroup, ListGroupItem, Badge, CardTitle, CardFooter, CardText, CardHeader } from 'reactstrap';
+import { Card, CardBody, Container, Row, Col, Button, FormGroup, Label, Input, NavLink, ListGroup, ListGroupItem, Badge, CardTitle, CardFooter, CardText, CardHeader, Alert } from 'reactstrap';
 
 const InputForm = (props) => {
     const { name, text, type, set } = props;
@@ -117,6 +117,10 @@ const Basket = (props) => {
                     <Col md={12} className="m-auto">
                         <Card className="mb-4 shadow-sm">
                             <CardHeader>
+                                {
+                                    !isLogged &&
+                                    <Alert>Чтобы заказать авторизуйтесь или зарегистрируйтесь</Alert>
+                                }
                                 <CardTitle tag="h5">Корзина</CardTitle>
                                 <CardText>Сумма заказа: {total}</CardText>
                             </CardHeader>

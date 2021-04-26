@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {
     Container, Row, Col, Button, Card, CardBody,
-    CardImg, CardTitle, Badge, ListGroup, ListGroupItem
+    CardImg, CardTitle, Badge, ListGroup, ListGroupItem, Input, FormGroup
 } from 'reactstrap';
 
 const mock = {
@@ -206,40 +206,145 @@ const ProductList = ({ products }) => {
     );
 }
 
-const AddToBasketButton = ({ basket, setBasket, id, name, price }) => {
+const Filter = ({ content, setFilteredContent }) => {
+    const [search, setSearch] = useState("");
+    const [sortOption, setOption] = useState("priceDesc");
 
-    const handle = () => {
+    useEffect(() => {
+        let filtered;
+        let sortFunc;
+
+        filtered = content.filter((item) => item.name.toLowerCase().includes(search));
+
+        switch (sortOption) {
+            case "priceAsc":
+                sortFunc = (a, b) => {
+                    if (a.price > b.price)
+                        return 1;
+                    if (a.price < b.price)
+                        return -1;
+                    return 0;
+                };
+                break
+            case "weightDesc":
+                sortFunc = (a, b) => {
+                    if (a.weight < b.weight)
+                        return 1;
+                    if (a.weight > b.weight)
+                        return -1;
+                    return 0;
+                };
+                break
+            case "weightAsc":
+                sortFunc = (a, b) => {
+                    if (a.weight > b.weight)
+                        return 1;
+                    if (a.weight < b.weight)
+                        return -1;
+                    return 0;
+                };
+                break
+            case "nameAsc":
+                sortFunc = (a, b) => {
+                    if (a.name > b.name)
+                        return 1;
+                    if (a.name < b.name)
+                        return -1;
+                    return 0;
+                };
+                break
+            case "nameAsc":
+                sortFunc = (a, b) => {
+                    if (a.name < b.name)
+                        return 1;
+                    if (a.name > b.name)
+                        return -1;
+                    return 0;
+                };
+                break
+            default:
+                sortFunc = (a, b) => {
+                    if (a.price < b.price)
+                        return 1;
+                    if (a.price > b.price)
+                        return -1;
+                    return 0;
+                };
+                break
+        }
+
+        filtered.sort(sortFunc);
+
+        setFilteredContent(filtered);
+    }, [search, sortOption])
+
+    return (
+        <Row className="catalog-sort-filter">
+            <Col xs='9'>
+                <Input
+                    type="text"
+                    placeholder="search"
+                    name="search"
+                    onChange={(e) => setSearch(e.target.value)}
+                />
+            </Col>
+
+            <Col xs='3'>
+                <FormGroup>
+                    <Input
+                        type="select"
+                        onChange={(e) => setOption(e.target.value)}
+                    >
+                        <option value="priceDesc">Цена ↓</option>
+                        <option value="priceAsc">Цена ↑</option>
+                        <option value="weightDesc">Вес ↓</option>
+                        <option value="weightAsc">Вес ↑</option>
+                        <option value="nameDesc">Название ↓</option>
+                        <option value="nameAsc">Название ↑</option>
+                    </Input>
+                </FormGroup>
+            </Col>
+        </Row>
+    );
+}
+
+const AdditionalInfo = ({ basket, setBasket, id, name, price, weight, status, isAdmin }) => {
+    let additionalInfo;
+
+    const addToBasket = () => {
         let orderItem = new Object();
         orderItem.id = id;
         orderItem.name = name;
         orderItem.price = price;
+        orderItem.weight = weight;
 
-        setBasket([...basket, orderItem])
+        setBasket([...basket, orderItem]);
+    }
+
+    if (isAdmin && !status) {
+        additionalInfo = <Button>Изъять с продажи</Button>;
+    } else if (isAdmin && status) {
+        additionalInfo = <Button>Вернуть в продажу</Button>;
+    } else if (!status) {
+        additionalInfo = <Button onClick={addToBasket}>Добавить в корзину</Button>;
+    } else {
+        additionalInfo = <p>Товар закончился :(</p>
     }
 
     return (
-        <Button onClick={handle}>Добавить в корзину</Button>
-    );
+        <ListGroupItem>
+            {additionalInfo}
+        </ListGroupItem>
+    )
 }
 
-const MenuCards = ({ content, basket, setBasket }) => {
+const MenuCards = ({ content, basket, setBasket, isAdmin }) => {
     let listItems;
 
     if (content && content.length > 0) {
         listItems = content.map((menu, item) => {
             const { id, name, price, weight, status, image, productResponseList } = menu;
-            const additionalInfo =
-                (status)
-                    ?
-                    "Нет в наличии"
-                    :
-                    <AddToBasketButton 
-                        basket={basket}
-                        setBasket={setBasket}
-                        id={id}
-                        name={name}
-                        price={price}
-                    />;
+
             const mock_img = "https://img.freepik.com/free-vector/cute-pizza-cartoon-vector-icon-illustration-fast-food-icon-concept-flat-cartoon-style_138676-2588.jpg?size=338&ext=jpg";
             return (
                 <Col md={3} key={item}>
@@ -251,8 +356,19 @@ const MenuCards = ({ content, basket, setBasket }) => {
                             </CardTitle>
                             <ListGroup flush>
                                 <ListGroupItem>Вес: {weight} гр</ListGroupItem>
-                                <ProductList products={productResponseList} />
-                                <ListGroupItem>{additionalInfo}</ListGroupItem>
+                                <ProductList
+                                    products={productResponseList}
+                                />
+                                <AdditionalInfo
+                                    id={id}
+                                    name={name}
+                                    price={price}
+                                    weight={weight}
+                                    basket={basket}
+                                    setBasket={setBasket}
+                                    isAdmin={isAdmin}
+                                    status={status}
+                                />
                             </ListGroup>
                         </CardBody>
                     </Card >
@@ -266,8 +382,10 @@ const MenuCards = ({ content, basket, setBasket }) => {
 
 const Menu = (props) => {
     props = mock;
+    const isAdmin = false;
 
     const [basket, setBasket] = useState([]);
+    const [filteredContent, setFilteredContent] = useState();
 
     useEffect(() => {
         const hasBasket = localStorage.getItem("hasBasket");
@@ -287,13 +405,16 @@ const Menu = (props) => {
     return (
         <section className="catalog">
             <Container>
-                {/* <Filter /> */}
-                <MenuCards
+                <Filter
                     content={mock.content}
+                    setFilteredContent={setFilteredContent}
+                />
+                <MenuCards
+                    content={filteredContent || mock.content}
                     basket={basket}
                     setBasket={setBasket}
+                    isAdmin={isAdmin}
                 />
-                {/* <CardsPagination getPage={page} cardCount={totalPages} /> */}
             </Container>
         </section>
     )

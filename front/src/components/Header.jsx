@@ -11,11 +11,11 @@ const Header = (props) => {
         <header className="header">
             <Container>
                 <Navbar color="light" light expand="xs">
-                    <NavbarBrand href="/catalog/page/1">Pizza</NavbarBrand>
+                    <NavbarBrand href="/">Pizza</NavbarBrand>
                     <Nav className="ml-auto" navbar>
                         <Navbar>
                             <NavItem>
-                                <NavLink href="/menu/">Меню</NavLink>
+                                <NavLink href="/">Меню</NavLink>
                             </NavItem>
                             {
                                 !isAdmin &&
@@ -32,7 +32,7 @@ const Header = (props) => {
                             {
                                 isLogged  &&
                                 <NavItem>
-                                    <NavLink href="/profile/">Статистика</NavLink>
+                                    <NavLink href="/stat/">Статистика</NavLink>
                                 </NavItem>
                             }
                             <NavItem>
