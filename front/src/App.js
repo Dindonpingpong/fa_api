@@ -5,6 +5,7 @@ import Login from './components/Login';
 import Register from './components/Register';
 import Menu from './components/Menu';
 import Basket from './components/Basket';
+import Profile from './components/Profile';
 
 const App = () => {
   const [isLogged, changeLogged] = useState(false);
@@ -18,7 +19,7 @@ const App = () => {
           <Route path='/register' component={Register} />
           <Route path='/menu/' component={Menu} />
           <Route path='/basket/' component={Basket} />
-          {/* <Route path='/profile' component={Profile} /> */}
+          <Route path='/profile' component={Profile} />
         </Switch>
       </Router>
     </div>

@@ -5,7 +5,7 @@ import "./../index.css";
 
 const Header = (props) => {
     const isLogged = true;
-    const isAdmin = true;
+    const isAdmin = false;
 
     return (
         <header className="header">
