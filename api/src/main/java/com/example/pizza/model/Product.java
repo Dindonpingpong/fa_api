@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -18,7 +19,7 @@ public class Product {
     private String name;
 
     @ManyToMany(mappedBy = "productSet")
-    Set<Menu> menuSet;
+    Set<Menu> menuSet = new HashSet<>();
 
     public Product() {
     }

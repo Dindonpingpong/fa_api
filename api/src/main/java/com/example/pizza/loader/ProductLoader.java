@@ -4,6 +4,7 @@ import com.example.pizza.model.Product;
 import com.example.pizza.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.stereotype.Component;
 
 //@Component
 public class ProductLoader implements CommandLineRunner {

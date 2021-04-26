@@ -1,38 +1,56 @@
 package com.example.pizza.loader;
 
 import com.example.pizza.model.Menu;
+import com.example.pizza.model.Product;
 import com.example.pizza.repository.MenuRepository;
+import com.example.pizza.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.stereotype.Component;
 
-//@Component
+import java.util.Arrays;
+import java.util.List;
+
+@Component
 public class MenuLoader implements CommandLineRunner {
     private final MenuRepository menuRepository;
+    private final ProductRepository productRepository;
 
     @Autowired
-    private MenuLoader(MenuRepository menuRepository) {
+    private MenuLoader(MenuRepository menuRepository, ProductRepository productRepository) {
         this.menuRepository = menuRepository;
+        this.productRepository = productRepository;
     }
 
-    @Override
-    public void run(String... args) throws Exception {
-        this.menuRepository.save(new Menu("Пепперони", 395, 570, false));
-        this.menuRepository.save(new Menu("Маргарита", 345, 620, false));
-        this.menuRepository.save(new Menu("Ветчина и грибы", 345, 600, false));
-        this.menuRepository.save(new Menu("Ветчина и сыр", 295, 500, false));
-        this.menuRepository.save(new Menu("Кисло-сладкий цыпленок", 295, 540, false));
-        this.menuRepository.save(new Menu("Цыпленок блю чиз", 445, 610, false));
-        this.menuRepository.save(new Menu("Цыпленок барбекю", 445, 660, false));
-        this.menuRepository.save(new Menu("Четыре сыра", 445, 550, false));
-        this.menuRepository.save(new Menu("Мясная", 445, 600, false));
-        this.menuRepository.save(new Menu("Гавайская", 395, 650, false));
-        this.menuRepository.save(new Menu("Карбонара", 395, 610, false));
-        this.menuRepository.save(new Menu("Мексиканская", 445, 710, false));
-        this.menuRepository.save(new Menu("Четыре сезона", 395, 640, false));
-        this.menuRepository.save(new Menu("Песто", 445, 610, false));
-        this.menuRepository.save(new Menu("Аррива!", 395, 590, false));
-        this.menuRepository.save(new Menu("Сырный цыпленок", 395, 620, false));
-        this.menuRepository.save(new Menu("Чизбургер-пицца", 395, 660, false));
-        this.menuRepository.save(new Menu("Чиззи чеддер", 395, 480, false));
+    public void run(String... args) {
+        Menu menuFirst = new Menu("Маргарита", 345, 620, false),
+                menuSecond = new Menu("Пепперони", 395, 570, false),
+                menuThird = new Menu("Ветчина и грибы", 345, 600, false);
+        Product productOne = new Product("Пепперони"),
+                productTwo = new Product("Ветчина"),
+                productThird = new Product("Томат"),
+                productFour = new Product("Шампишьон"),
+                productFive = new Product("Красный лук"),
+                productSex = new Product("Острый цыпленок"),
+                productSeven = new Product("Сыр моцарелла");
+
+        List<Product> listProductFirst = Arrays.asList(productThird, productSeven, productFive);
+        List<Product> listProductSecond = Arrays.asList(productOne, productTwo, productThird, productFour);
+        List<Product> listProductThird = Arrays.asList(productSex);
+
+        menuRepository.save(menuFirst);
+        productRepository.saveAll(listProductFirst);
+        menuFirst.addProduct(listProductFirst);
+        menuRepository.save(menuFirst);
+
+        menuRepository.save(menuSecond);
+        productRepository.saveAll(listProductSecond);
+        menuSecond.addProduct(listProductSecond);
+        menuRepository.save(menuSecond);
+
+        menuRepository.save(menuThird);
+        productRepository.saveAll(listProductThird);
+        menuThird.addProduct(listProductThird);
+        menuRepository.save(menuThird);
     }
 }
