@@ -1,6 +1,7 @@
 package com.example.pizza.service;
 
 import com.example.pizza.model.Menu;
+import com.example.pizza.model.Product;
 import com.example.pizza.payload.*;
 import com.example.pizza.repository.MenuRepository;
 import com.example.pizza.repository.ProductRepository;
@@ -56,19 +57,24 @@ public class MenuService {
         }
 
         List<MenuResponse> menuResponseList = new ArrayList<>();
-
         menus.forEach(menu -> {
             List<ProductResponse> productResponseList = new ArrayList<>();
 
-            menu.getProductSet().forEach(product -> productResponseList.add(new ProductResponse(product.getId(),product.getName())));
-
-            MenuResponse menuResponse = new MenuResponse(menu.getId(),menu.getName(),menu.getPrice(),menu.getWeight(),menu.isStatus(), productResponseList);
-
+            menu.getProductSet().forEach(product -> productResponseList.add(new ProductResponse(product.getId(), product.getName())));
+            MenuResponse menuResponse = new MenuResponse(menu.getId(), menu.getName(), menu.getPrice(), menu.getWeight(), menu.isStatus(), productResponseList);
             menuResponseList.add(menuResponse);
         });
-
-
         return new PagedResponse<>(menuResponseList, menus.getNumber(), menus.getSize(), menus.getTotalElements(), menus.getTotalPages(), menus.isLast());
+    }
+
+    public void createMenu(MenuRequest menuRequest) {
+        Menu menu = new Menu(menuRequest.getName(), menuRequest.getPrice(), menuRequest.getWeight(), menuRequest.isStatus());
+        if (menuRequest.getProductResponseList() != null) {
+            List<Product> listProduct = new ArrayList<>();
+            menuRequest.getProductResponseList().forEach(product -> listProduct.add(productRepository.getOne(product.getId())));
+            menu.addProduct(listProduct);
+        }
+        menuRepository.save(menu);
     }
 
 }
