@@ -3,6 +3,8 @@ import {
     Container, Row, Col, Button, Card, CardBody,
     CardImg, CardTitle, Badge, ListGroup, ListGroupItem, Input, FormGroup
 } from 'reactstrap';
+import ModalAdd from './ModalAdd';
+
 
 const mock = {
     "content": [
@@ -206,9 +208,10 @@ const ProductList = ({ products }) => {
     );
 }
 
-const Filter = ({ content, setFilteredContent }) => {
+const Filter = ({ content, setFilteredContent, isAdmin }) => {
     const [search, setSearch] = useState("");
     const [sortOption, setOption] = useState("priceDesc");
+    const size = (isAdmin) ? '2' : '4';
 
     useEffect(() => {
         let filtered;
@@ -280,7 +283,9 @@ const Filter = ({ content, setFilteredContent }) => {
 
     return (
         <Row className="catalog-sort-filter">
-            <Col xs='9'>
+
+
+            <Col xs='8'>
                 <Input
                     type="text"
                     placeholder="search"
@@ -289,7 +294,7 @@ const Filter = ({ content, setFilteredContent }) => {
                 />
             </Col>
 
-            <Col xs='3'>
+            <Col xs={size}>
                 <FormGroup>
                     <Input
                         type="select"
@@ -303,7 +308,15 @@ const Filter = ({ content, setFilteredContent }) => {
                         <option value="nameAsc">Название ↑</option>
                     </Input>
                 </FormGroup>
+
             </Col>
+
+            {
+                isAdmin &&
+                <ModalAdd
+                    buttonLabel="Добавить пиццу"
+                />
+            }
         </Row>
     );
 }
@@ -382,7 +395,7 @@ const MenuCards = ({ content, basket, setBasket, isAdmin }) => {
 
 const Menu = (props) => {
     props = mock;
-    const isAdmin = false;
+    const isAdmin = true;
 
     const [basket, setBasket] = useState([]);
     const [filteredContent, setFilteredContent] = useState();
@@ -406,6 +419,7 @@ const Menu = (props) => {
         <section className="catalog">
             <Container>
                 <Filter
+                    isAdmin={isAdmin}
                     content={mock.content}
                     setFilteredContent={setFilteredContent}
                 />

@@ -1,26 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams, withRouter } from 'react-router-dom';
-import { Card, CardBody, Container, Row, Col, Button, FormGroup, Label, Input, NavLink } from 'reactstrap';
-import axios from 'axios';
-
-const InputForm = ({ name, text, type, set }) => {
-
-    return (
-        <Col>
-            <FormGroup>
-                <Label className="font-profile-head">
-                    {text}
-                    <Input
-                        type={type}
-                        name={name}
-                        onChange={e => set(e.target.value)}
-                        required
-                    />
-                </Label>
-            </FormGroup>
-        </Col>
-    );
-}
+import { Card, CardBody, Container, Row, Col, Button, NavLink } from 'reactstrap';
+import InputForm from './InputForm';
 
 const Login = () => {
     const { username, hash } = useParams();
@@ -47,8 +28,6 @@ const Login = () => {
         fetch("http://localhost:8080/api/auth/signin", opts)
             .then(response => response.json())
     };
-
-
 
     return (
         <section className="login">

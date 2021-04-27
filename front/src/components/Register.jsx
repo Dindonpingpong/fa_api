@@ -1,9 +1,23 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory, useParams, withRouter } from 'react-router-dom';
-import { Card, CardBody, Container, Row, Col, Button, FormGroup, Label, Input, NavLink } from 'reactstrap';
+import { Card, CardBody, Container, Row, Col, Button, FormGroup, Label, Input, NavLink, FormFeedback } from 'reactstrap';
+import { validateEmail, validateFirstName, validateLastName, validateLogin, validatePassword, validatePhone } from './../utils/validators';
 
-const InputForm = (props) => {
-    const { name, text, type, set } = props;
+const InputForm = ({ name, text, type, set, validate }) => {
+    const [isValid, toggleValid] = useState('');
+    const [feedback, setFeedback] = useState('');
+
+    const onChange = async (e) => {
+        const value = e.target.value;
+        const result = await validate(value);
+        
+        if (result == 'ok') {
+            toggleValid('is-valid');
+            set(value);
+        } else {
+            toggleValid('is-invalid');
+            setFeedback(result);
+        }
+    }
 
     return (
         <Col>
@@ -13,38 +27,23 @@ const InputForm = (props) => {
                     <Input
                         type={type}
                         name={name}
-                        onChange={e => set(e.target.value)}
+                        onChange={onChange}
+                        className={isValid}
                         required
                     />
+                    <FormFeedback>{feedback}</FormFeedback>
                 </Label>
             </FormGroup>
         </Col>
     );
 }
 
-const Login = (props) => {
-    const history = useHistory();
-    const { username, hash } = useParams();
-    const [msg, setMsg] = useState(null);
-    const names = ["github", "intra"];
+const Register = (props) => {
     const [login, setLogin] = useState();
     const [password, setPassword] = useState();
 
-    const handleOauth = (e) => {
-        if (names.includes(e.target.name)) {
-            window.open(`http://localhost:5000/api/auth/${e.target.name}`, "_self");
-        }
-    }
 
-    const submit = () => {  };
-
-    if (username && hash) {
-        const data = {
-            username: username,
-            hash: hash
-        };
-
-    }
+    const submit = () => { };
 
     return (
         <section className="login">
@@ -53,12 +52,12 @@ const Login = (props) => {
                     <Col md={6} className="m-auto">
                         <Card className="mb-4 shadow-sm">
                             <CardBody>
-                                <InputForm name="Login" text="Логин" type="text" set={setLogin} />
-                                <InputForm name="Password" text="Почта" type="email" set={setPassword} />
-                                <InputForm name="Password" text="Фамилия" type="text" set={setPassword} />
-                                <InputForm name="Password" text="Имя" type="text" set={setPassword} />
-                                <InputForm name="Password" text="Телефон" type="tel" set={setPassword} />
-                                <InputForm name="Password" text="Пароль" type="password" set={setPassword} />
+                                <InputForm name="Login" text="Логин" type="text" set={setLogin} validate={validateLogin}/>
+                                <InputForm name="Email" text="Почта" type="email" set={setPassword} validate={validateEmail}/>
+                                <InputForm name="lastName" text="Фамилия" type="text" set={setPassword} validate={validateLastName}/>
+                                <InputForm name="firstName" text="Имя" type="text" set={setPassword} validate={validateFirstName}/>
+                                <InputForm name="phone" text="Телефон" type="tel" set={setPassword} validate={validatePhone}/>
+                                <InputForm name="Password" text="Пароль" type="password" set={setPassword} validate={validatePassword}/>
 
                                 <Col>
                                     <Button className="login-btn" onClick={submit}>Зарегистрироваться</Button>
@@ -72,4 +71,4 @@ const Login = (props) => {
     )
 }
 
-export default Login;
+export default Register;

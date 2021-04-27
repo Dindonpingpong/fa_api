@@ -5,7 +5,7 @@ import "./../index.css";
 
 const Header = (props) => {
     const isLogged = true;
-    const isAdmin = false;
+    const isAdmin = true;
 
     return (
         <header className="header">
@@ -39,7 +39,7 @@ const Header = (props) => {
                                 <NavLink href="/about/">Об авторе</NavLink>
                             </NavItem>
                             {
-                                isAdmin &&
+                                isLogged && isAdmin &&
                                 <NavItem>
                                     <NavLink href='/products'>
                                         Продукты
@@ -47,7 +47,7 @@ const Header = (props) => {
                                 </NavItem>
                             }
                             {
-                                isAdmin &&
+                                isLogged && isAdmin &&
                                 <NavItem>
                                     <NavLink href='/products'>
                                         Заказы
