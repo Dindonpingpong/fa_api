@@ -1,16 +1,22 @@
 package com.example.pizza.controller;
 
-import com.example.pizza.payload.MenuRequest;
-import com.example.pizza.payload.MenuResponse;
-import com.example.pizza.payload.PagedResponse;
+import com.example.pizza.model.Menu;
+import com.example.pizza.model.Product;
+import com.example.pizza.payload.*;
+import com.example.pizza.repository.MenuRepository;
+import com.example.pizza.repository.ProductRepository;
 import com.example.pizza.service.MenuService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static com.example.pizza.util.AppConstants.*;
-import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.HttpStatus.*;
 
 @RestController
 @RequestMapping("/api/menu")
@@ -20,16 +26,27 @@ public class MenuController {
     MenuService menuService;
 
     @GetMapping
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasRole('USER') || hasRole('ADMIN')")
     public PagedResponse<MenuResponse> getMenu(@RequestParam(value = "page", defaultValue = DEFAULT_PAGE_NUMBER) int page,
-                                       @RequestParam(value = "size", defaultValue = DEFAULT_PAGE_SIZE) int size,
-                                       @RequestParam(value = "sort", defaultValue = DEFAULT_SORT_TYPE) boolean sortDesc) {
-        return menuService.getAllMenu(page,size,sortDesc);
+                                               @RequestParam(value = "size", defaultValue = DEFAULT_PAGE_SIZE) int size,
+                                               @RequestParam(value = "sort", defaultValue = DEFAULT_SORT_TYPE) boolean sortDesc) {
+        return menuService.getAllMenu(page, size, sortDesc);
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity updateMenu(@PathVariable long id, @RequestBody MenuRequest menuRequest) {
-        return new ResponseEntity(menuService.updateMenu(id,menuRequest), OK);
+    public ResponseEntity<?> updateMenu(@PathVariable long id, @RequestBody MenuRequest menuRequest) {
+        return new ResponseEntity<>(menuService.updateMenu(id, menuRequest), OK);
+    }
+
+    @PostMapping("/add")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> addNewItemMenu(@RequestBody MenuRequest menuRequest) {
+        try {
+            menuService.createMenu(menuRequest);
+            return new ResponseEntity<>(new ApiResponse(true, "New item menu created"), CREATED);
+        } catch (DataAccessException exception) {
+            return new ResponseEntity<>(new ApiResponse(false, "New item menu did not create"), INTERNAL_SERVER_ERROR);
+        }
     }
 }

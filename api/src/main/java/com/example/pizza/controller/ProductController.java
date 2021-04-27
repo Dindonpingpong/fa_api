@@ -13,6 +13,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 
+import java.util.List;
+
 import static com.example.pizza.util.AppConstants.*;
 import static org.springframework.http.HttpStatus.*;
 
@@ -24,13 +26,15 @@ public class ProductController {
     @Autowired
     ProductService productService;
 
+
+
     @PostMapping
-    public ResponseEntity createProduct(@RequestBody ProductRequest productRequest) {
+    public ResponseEntity<?> createProduct(@RequestBody ProductRequest productRequest) {
         try {
             productService.createProduct(new Product(productRequest.getName()));
-            return new ResponseEntity(new ApiResponse(true, "Product created"), CREATED);
+            return new ResponseEntity<>(new ApiResponse(true, "Product created"), CREATED);
         } catch (DataAccessException exception) {
-            return new ResponseEntity(new ApiResponse(false, "Product did not create"), INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(new ApiResponse(false, "Product did not create"), INTERNAL_SERVER_ERROR);
         }
     };
 
@@ -42,9 +46,14 @@ public class ProductController {
         return productService.getSortProduct(page, size, sortDesc);
     };
 
+    @GetMapping("/all")
+    public List<ProductResponse> getProducts() {
+        return productService.getAllProducts();
+    }
+
     @PutMapping("/{id}")
-    public ResponseEntity updateProduct(@PathVariable long id, @RequestBody String name) {
-        return new ResponseEntity(productService.updateProduct(name,id), OK);
+    public ResponseEntity<?> updateProduct(@PathVariable long id, @RequestBody String name) {
+        return new ResponseEntity<>(productService.updateProduct(name,id), OK);
     }
 
 }

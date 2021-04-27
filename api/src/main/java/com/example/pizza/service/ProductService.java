@@ -28,15 +28,14 @@ public class ProductService {
 
     public PagedResponse<ProductResponse> getSortProduct(int page, int size, boolean sortType) {
         var sort = (sortType) ? DESC : ASC;
-        Pageable pageable = PageRequest.of(page,size,sort,"name");
+        Pageable pageable = PageRequest.of(page, size, sort, "name");
         Page<Product> products = productRepository.findAll(pageable);
 
         List<ProductResponse> productResponseList = new ArrayList<>();
-        products.forEach(product -> productResponseList.add(new ProductResponse(product.getId(),product.getName())));
+        products.forEach(product -> productResponseList.add(new ProductResponse(product.getId(), product.getName())));
         Collections.reverse(productResponseList);
 
         return new PagedResponse<ProductResponse>(productResponseList, products.getNumber(), products.getSize(), products.getTotalElements(), products.getTotalPages(), products.isLast());
-
     }
 
     public Optional<Product> getProductById(Long id) {
@@ -55,4 +54,14 @@ public class ProductService {
             return new ApiResponse(false, "Product not found");
         }
     }
+
+    public List<ProductResponse> getAllProducts() {
+        List<Product> products = productRepository.findAll();
+
+        List<ProductResponse> productResponseList = new ArrayList<>();
+        products.forEach(product -> productResponseList.add(new ProductResponse(product.getId(), product.getName())));
+
+        return productResponseList;
+    }
+
 }

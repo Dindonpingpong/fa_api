@@ -9,6 +9,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @Component
@@ -36,7 +37,7 @@ public class MenuLoader implements CommandLineRunner {
 
         List<Product> listProductFirst = Arrays.asList(productThird, productSeven, productFive);
         List<Product> listProductSecond = Arrays.asList(productOne, productTwo, productThird, productFour);
-        List<Product> listProductThird = Arrays.asList(productSex);
+        List<Product> listProductThird = Collections.singletonList(productSex);
 
         menuRepository.save(menuFirst);
         productRepository.saveAll(listProductFirst);
