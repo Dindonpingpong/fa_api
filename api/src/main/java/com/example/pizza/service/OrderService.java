@@ -2,21 +2,16 @@ package com.example.pizza.service;
 
 import com.example.pizza.model.*;
 import com.example.pizza.payload.ApiResponse;
+import com.example.pizza.payload.IdRequest;
 import com.example.pizza.payload.OrderMenuRequest;
 import com.example.pizza.payload.OrderRequest;
-import com.example.pizza.repository.MenuRepository;
-import com.example.pizza.repository.OrderRepository;
-import com.example.pizza.repository.Order_ItemsRepository;
-import com.example.pizza.repository.UserRepository;
+import com.example.pizza.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static org.springframework.http.HttpStatus.CONFLICT;
 import static org.springframework.http.HttpStatus.CREATED;
@@ -35,6 +30,9 @@ public class OrderService {
 
     @Autowired
     Order_ItemsRepository order_itemsRepository;
+
+    @Autowired
+    EmployeeRepository employeeRepository;
 
     public ResponseEntity<?> createOrder(OrderRequest orderRequest) {
         try {
@@ -80,5 +78,20 @@ public class OrderService {
         });
 
         return orderList;
+    }
+
+    public ApiResponse updateOrder(Long id, IdRequest idRequest) {
+        Optional<Order> orderFromDb = orderRepository.findById(id);
+        Optional<Employee> employeeFromDb = employeeRepository.findById(idRequest.getId());
+
+        if (orderFromDb.isPresent() && employeeFromDb.isPresent()) {
+            Order newOrder = orderFromDb.get();
+            Employee employee = employeeFromDb.get();
+            newOrder.setEmployee(employee);
+            orderRepository.save(newOrder);
+            return new ApiResponse(true, "Order updated");
+        } else {
+            return new ApiResponse(false, "Order not found");
+        }
     }
 }
