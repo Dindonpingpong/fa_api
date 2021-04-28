@@ -1,7 +1,9 @@
 package com.example.pizza.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.*;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Entity
@@ -11,8 +13,10 @@ public class Employee {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    public Employee(){}
-    public Employee(String firstName, String lastName, String telephone, LocalDate hireDate) {
+    public Employee() {
+    }
+
+    public Employee(String firstName, String lastName, String telephone, LocalDateTime hireDate) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.telephone = telephone;
@@ -51,18 +55,20 @@ public class Employee {
         this.telephone = telephone;
     }
 
-    public LocalDate getHireDate() {
+    public LocalDateTime getHireDate() {
         return hireDate;
     }
 
-    public void setHireDate(LocalDate hireDate) {
+    public void setHireDate(LocalDateTime hireDate) {
         this.hireDate = hireDate;
     }
 
     private String firstName;
     private String lastName;
     private String telephone;
-    private LocalDate hireDate;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", shape = JsonFormat.Shape.STRING)
+    private LocalDateTime hireDate;
 
     @OneToMany(mappedBy = "employee")
     private Set<Order> orders;
