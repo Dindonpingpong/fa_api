@@ -26,8 +26,6 @@ public class ProductController {
     @Autowired
     ProductService productService;
 
-
-
     @PostMapping
     public ResponseEntity<?> createProduct(@RequestBody ProductRequest productRequest) {
         try {
@@ -36,7 +34,7 @@ public class ProductController {
         } catch (DataAccessException exception) {
             return new ResponseEntity<>(new ApiResponse(false, "Product did not create"), INTERNAL_SERVER_ERROR);
         }
-    };
+    }
 
     @GetMapping
     public PagedResponse<ProductResponse> getProduct(@RequestParam(value = "page", defaultValue = DEFAULT_PAGE_NUMBER) int page,
@@ -44,7 +42,7 @@ public class ProductController {
                                                      @RequestParam(value = "sort", defaultValue = DEFAULT_SORT_TYPE) String sortType) {
         boolean sortDesc = sortType.equalsIgnoreCase("desc");
         return productService.getSortProduct(page, size, sortDesc);
-    };
+    }
 
     @GetMapping("/all")
     public List<ProductResponse> getProducts() {
@@ -53,7 +51,7 @@ public class ProductController {
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateProduct(@PathVariable long id, @RequestBody String name) {
-        return new ResponseEntity<>(productService.updateProduct(name,id), OK);
+        return new ResponseEntity<>(productService.updateProduct(name, id), OK);
     }
 
 }

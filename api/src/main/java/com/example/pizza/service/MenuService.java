@@ -77,4 +77,17 @@ public class MenuService {
         menuRepository.save(menu);
     }
 
+    public ApiResponse updateItemMenuStatus(Long Id) {
+        Optional<Menu> menuFromDb = menuRepository.findById(Id);
+
+        if (menuFromDb.isPresent()) {
+            Menu updatedMenu = menuFromDb.get();
+            updatedMenu.setStatus(true);
+            menuRepository.save(updatedMenu);
+            return new ApiResponse(true, "Menu item deleted");
+        } else {
+            return new ApiResponse(false, "Menu item not found");
+        }
+    }
+
 }

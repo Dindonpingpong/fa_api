@@ -49,4 +49,11 @@ public class MenuController {
             return new ResponseEntity<>(new ApiResponse(false, "New item menu did not create"), INTERNAL_SERVER_ERROR);
         }
     }
+
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> deleteItemMenu(@PathVariable long id) {
+        return new ResponseEntity<>(menuService.updateItemMenuStatus(id), OK);
+    }
+
 }
