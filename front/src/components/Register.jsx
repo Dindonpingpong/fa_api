@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Card, CardBody, Container, Row, Col, Button, FormGroup, Label, Input, NavLink, FormFeedback } from 'reactstrap';
+import React, { useState } from 'react';
+import { Card, CardBody, Container, Row, Col, Button, FormGroup, Label, Input, FormFeedback } from 'reactstrap';
 import { validateEmail, validateFirstName, validateLastName, validateLogin, validatePassword, validatePhone } from './../utils/validators';
 
 const InputForm = ({ name, text, type, set, validate }) => {
@@ -10,7 +10,7 @@ const InputForm = ({ name, text, type, set, validate }) => {
         const value = e.target.value;
         const result = await validate(value);
         
-        if (result == 'ok') {
+        if (result === 'ok') {
             toggleValid('is-valid');
             set(value);
         } else {
@@ -43,7 +43,9 @@ const Register = (props) => {
     const [password, setPassword] = useState();
 
 
-    const submit = () => { };
+    const submit = () => { 
+
+    };
 
     return (
         <section className="login">

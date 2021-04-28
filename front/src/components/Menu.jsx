@@ -4,7 +4,8 @@ import {
     CardImg, CardTitle, Badge, ListGroup, ListGroupItem, Input, FormGroup
 } from 'reactstrap';
 import ModalAdd from './ModalAdd';
-
+import Info from './Info';
+import ModalAddRedactMenu from './ModalRedactMenu';
 
 const mock = {
     "content": [
@@ -283,8 +284,6 @@ const Filter = ({ content, setFilteredContent, isAdmin }) => {
 
     return (
         <Row className="catalog-sort-filter">
-
-
             <Col xs='8'>
                 <Input
                     type="text"
@@ -321,7 +320,7 @@ const Filter = ({ content, setFilteredContent, isAdmin }) => {
     );
 }
 
-const AdditionalInfo = ({ basket, setBasket, id, name, price, weight, status, isAdmin }) => {
+const AdditionalInfo = ({ basket, setBasket, id, name, price, weight, products, status, isAdmin, setMessage }) => {
     let additionalInfo;
 
     const addToBasket = () => {
@@ -332,26 +331,39 @@ const AdditionalInfo = ({ basket, setBasket, id, name, price, weight, status, is
         orderItem.weight = weight;
 
         setBasket([...basket, orderItem]);
+        setMessage(`Пицца "${name}" добавлена в корзину`);
     }
 
     if (isAdmin && !status) {
-        additionalInfo = <Button>Изъять с продажи</Button>;
+        additionalInfo =
+            <Col><Button color="danger" block>Изъять с продажи</Button></Col>;
     } else if (isAdmin && status) {
-        additionalInfo = <Button>Вернуть в продажу</Button>;
+        additionalInfo = <Button block>Вернуть в продажу</Button>;
     } else if (!status) {
-        additionalInfo = <Button onClick={addToBasket}>Добавить в корзину</Button>;
+        additionalInfo = <Button onClick={addToBasket} block>Добавить в корзину</Button>;
     } else {
         additionalInfo = <p>Товар закончился :(</p>
     }
 
     return (
         <ListGroupItem>
+            {
+                isAdmin &&
+                <ModalAddRedactMenu
+                    id={id}
+                    defaultName={name}
+                    defaultPrice={price}
+                    defaultWeight={weight}
+                    defaultProducts={products}
+                    clearBasket={setBasket}
+                />
+            }
             {additionalInfo}
         </ListGroupItem>
     )
 }
 
-const MenuCards = ({ content, basket, setBasket, isAdmin }) => {
+const MenuCards = ({ content, basket, setBasket, isAdmin, setMessage }) => {
     let listItems;
 
     if (content && content.length > 0) {
@@ -377,10 +389,12 @@ const MenuCards = ({ content, basket, setBasket, isAdmin }) => {
                                     name={name}
                                     price={price}
                                     weight={weight}
+                                    products={productResponseList}
                                     basket={basket}
                                     setBasket={setBasket}
                                     isAdmin={isAdmin}
                                     status={status}
+                                    setMessage={setMessage}
                                 />
                             </ListGroup>
                         </CardBody>
@@ -395,20 +409,24 @@ const MenuCards = ({ content, basket, setBasket, isAdmin }) => {
 
 const Menu = (props) => {
     props = mock;
-    const isAdmin = true;
 
+    const [isAdmin, setAdmin] = useState();
     const [basket, setBasket] = useState([]);
     const [filteredContent, setFilteredContent] = useState();
+    const [message, setMessage] = useState();
 
     useEffect(() => {
-        const hasBasket = localStorage.getItem("hasBasket");
+        const admin = (localStorage.getItem('isAdmin') === 'true') ? true : false;
+        let basket = localStorage.getItem("basket");
 
-        if (hasBasket === 'false') {
-            localStorage.setItem("hasBasket", true);
-            localStorage.setItem("basket", []);
-        } else {
-            setBasket(JSON.parse(localStorage.getItem("basket")));
+        try {
+            basket = (basket) ? JSON.parse(basket) : [];
+        } catch {
+            basket = [];
         }
+
+        setAdmin(admin);
+        setBasket(basket);
     }, []);
 
     useEffect(() => {
@@ -423,11 +441,20 @@ const Menu = (props) => {
                     content={mock.content}
                     setFilteredContent={setFilteredContent}
                 />
+                {
+                    message &&
+                    <Row>
+                        <Col>
+                            <Info message={message} setMessage={setMessage} isSuccess={true} />
+                        </Col>
+                    </Row>
+                }
                 <MenuCards
                     content={filteredContent || mock.content}
                     basket={basket}
                     setBasket={setBasket}
                     isAdmin={isAdmin}
+                    setMessage={setMessage}
                 />
             </Container>
         </section>

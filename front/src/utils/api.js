@@ -30,7 +30,7 @@ const request = (options) => {
         });
 };
 
-export const login = (loginRequest) => {
+export const loginFetch = (loginRequest) => {
     return request({
         url: API_BASE_URL + "/auth/signin",
         method: 'POST',

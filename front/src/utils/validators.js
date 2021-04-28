@@ -1,7 +1,7 @@
 import { checkUsernameAvailability, checkEmailAvailability } from './api';
 
 const checkExist = async (value, type) => {
-    const res = (type == 'login') ?
+    const res = (type === 'login') ?
         await checkUsernameAvailability(value)
         :
         await checkEmailAvailability(value);
@@ -50,7 +50,7 @@ export const validatePhone = async (value) => {
     const regex = /^\+7[0-9]{3}-[0-9]{3}-[0-9]{4}$/;
 
     if (!value.match(regex))
-        return 'Некорректный номер. Введите в формате +7999-123-456-7891';
+        return 'Некорректный номер. Введите в формате +7999-123-7891';
     return 'ok';
 }
 

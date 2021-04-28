@@ -1,7 +1,7 @@
 import React from 'react';
 import { Col, FormGroup, Label, Input, Row } from 'reactstrap';
 
-const Horizontal = ({ name, text, type, set }) => {
+const Horizontal = ({ name, text, type, set, defaultValue }) => {
     return (
         <Row>
             <Col xs='4'>
@@ -11,6 +11,7 @@ const Horizontal = ({ name, text, type, set }) => {
                 <Input
                     type={type}
                     name={name}
+                    defaultValue={"" || defaultValue}
                     onChange={e => set(e.target.value)}
                     required
                 />
@@ -19,13 +20,14 @@ const Horizontal = ({ name, text, type, set }) => {
     )
 }
 
-const Vertical = ({ name, text, type, set }) => {
+const Vertical = ({ name, text, type, set, defaultValue }) => {
     return (
         <div>
             { text}
             < Input
                 type={type}
                 name={name}
+                defaultValue={"" || defaultValue}
                 onChange={e => set(e.target.value)}
                 required
             />
@@ -33,7 +35,7 @@ const Vertical = ({ name, text, type, set }) => {
     )
 }
 
-const InputForm = ({ name, text, type, set, horizontal }) => {
+const InputForm = ({ name, text, type, set, horizontal, defaultValue }) => {
 
 
     return (
@@ -47,6 +49,7 @@ const InputForm = ({ name, text, type, set, horizontal }) => {
                                 text={text}
                                 type={type}
                                 set={set}
+                                defaultValue={defaultValue}
                             />
                             :
                             <Vertical
@@ -54,6 +57,7 @@ const InputForm = ({ name, text, type, set, horizontal }) => {
                                 text={text}
                                 type={type}
                                 set={set}
+                                defaultValue={defaultValue}
                             />
                     }
                 </Label>

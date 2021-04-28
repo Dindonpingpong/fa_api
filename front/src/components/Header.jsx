@@ -1,11 +1,26 @@
-import React, { useEffect } from "react";
-import { withRouter, useHistory } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
 import { Container, Navbar, NavbarBrand, Nav, NavItem, NavLink } from 'reactstrap';
 import "./../index.css";
 
-const Header = (props) => {
-    const isLogged = true;
-    const isAdmin = true;
+const Header = () => {
+    const [isLogged, setLogged] = useState();
+    const [isAdmin, setAdmin] = useState();
+
+    useEffect(() => {
+        const logged = (localStorage.getItem('isLogged') === 'true') ? true : false;
+        const admin = (localStorage.getItem('isAdmin') === 'true') ? true : false;
+
+        setLogged(logged);
+        setAdmin(admin);
+    }, [isAdmin, isLogged]);
+
+    const logOut = () => {
+        localStorage.setItem("isLogged", false);
+        localStorage.setItem("isAdmin", false);
+        localStorage.setItem("accessToken", null);
+        setLogged(false);
+        setAdmin(false);
+    }
 
     return (
         <header className="header">
@@ -30,9 +45,9 @@ const Header = (props) => {
                                 </NavItem>
                             }
                             {
-                                isLogged  &&
+                                isLogged &&
                                 <NavItem>
-                                    <NavLink href="/stat/">Статистика</NavLink>
+                                    <NavLink href="/stat/">Статистика{!isLogged}</NavLink>
                                 </NavItem>
                             }
                             <NavItem>
@@ -57,7 +72,7 @@ const Header = (props) => {
                             {
                                 isLogged &&
                                 <NavItem>
-                                    <NavLink href='/login'>
+                                    <NavLink href='/login' onClick={logOut}>
                                         Выход
                                     </NavLink>
                                 </NavItem>

@@ -1,26 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory, useParams, withRouter } from 'react-router-dom';
-import { Card, CardBody, Container, Row, Col, Button, FormGroup, Label, Input, NavLink, ListGroup, ListGroupItem, Badge, CardTitle, CardFooter, CardText, CardHeader, Alert } from 'reactstrap';
-
-const InputForm = (props) => {
-    const { name, text, type, set } = props;
-
-    return (
-        <Col>
-            <FormGroup>
-                <Label className="font-profile-head">
-                    {text}
-                    <Input
-                        type={type}
-                        name={name}
-                        onChange={e => set(e.target.value)}
-                        required
-                    />
-                </Label>
-            </FormGroup>
-        </Col>
-    );
-}
+import { Card, CardBody, Container, Row, Col, Button, FormGroup, Label, Input,
+     ListGroup, ListGroupItem, Badge, CardTitle, CardFooter, CardText, CardHeader, Alert } from 'reactstrap';
+import ModalAddOrder from './ModalAddOrder';
 
 const RemoveFromBasketButton = ({ id, basket, setBasket }) => {
     const handle = () => {
@@ -91,24 +72,37 @@ const BasketBody = ({ basket, setBasket }) => {
     )
 };
 
-const Basket = (props) => {
-    const isLogged = false;
+const Basket = () => {
+    const [isLogged, setLogged] = useState();
     const [basket, setBasket] = useState([]);
     const [total, setTotal] = useState(0);
+    const [name, setName] = useState();
+    const [phone, setPhone] = useState();
+    const [orderTime, setOrderTime] = useState();
 
     useEffect(() => {
-        const hasBasket = localStorage.getItem("hasBasket");
+        const logged = (localStorage.getItem('isLogged') === 'true') ? true : false;
+        let basket = localStorage.getItem("basket");
 
-        if (!hasBasket) {
-            localStorage.setItem("hasBasket", true);
-        } else {
-            setBasket(JSON.parse(localStorage.getItem("basket")));
+        try {
+            basket = (basket) ? JSON.parse(basket) : [];
+        } catch {
+            basket = [];
         }
+
+        setLogged(logged);
+        setBasket(basket);
     }, []);
 
     useEffect(() => {
         setTotal(basket.reduce((sum, cur) => sum + cur.price, 0));
     }, [basket])
+
+    const clearBasket = () => {
+        setBasket([]);
+        localStorage.setItem("basket", []);
+        window.location.reload();
+    }
 
     return (
         <section className="login">
@@ -131,13 +125,16 @@ const Basket = (props) => {
                             <CardFooter className="text-muted">
                                 <Row>
                                     <Col>
-                                        <Button>Очистить</Button>
+                                        <Button onClick={clearBasket}>Очистить</Button>
                                     </Col>
                                     {
-                                        isLogged &&
-                                        <Col>
-                                            <Button>Заказать</Button>
-                                        </Col>
+                                        isLogged && basket.length > 0 &&
+                                        <ModalAddOrder
+                                            setName={setName}
+                                            setPhone={setPhone}
+                                            setOrderTime={setOrderTime}
+                                            clearBasket={clearBasket}
+                                        />
                                     }
                                 </Row>
                             </CardFooter>

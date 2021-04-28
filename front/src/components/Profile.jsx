@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { useHistory, useParams, withRouter } from 'react-router-dom';
-import { Card, CardBody, Container, Row, Col, Button, FormGroup, Label, Input, NavLink } from 'reactstrap';
+import React from 'react';
+import { useParams } from 'react-router-dom';
+import { Card, CardBody, Container, Row, Col, Button, FormGroup, Label, Input } from 'reactstrap';
 
 const InputForm = (props) => {
     const { name, text, type, set } = props;
@@ -29,13 +29,8 @@ const InputForm = (props) => {
     );
 }
 
-const Profile = (props) => {
-    const history = useHistory();
+const Profile = () => {
     const { username, hash } = useParams();
-    const [msg, setMsg] = useState(null);
-    const names = ["github", "intra"];
-    const [login, setLogin] = useState();
-    const [password, setPassword] = useState();
 
     const submit = () => { };
 

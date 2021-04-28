@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory, useParams, withRouter } from 'react-router-dom';
-import { Card, CardBody, Container, Row, Col, Button, FormGroup, Label, Input, NavLink } from 'reactstrap';
+import { Card, CardBody, Container, Row, Col } from 'reactstrap';
 
 import {
     XYPlot,
@@ -47,19 +46,12 @@ const Stat = () => {
     const [prices, setPrices] = useState([]);
     const [weights, setWeights] = useState([]);
 
-    const mock = [
-        { x: 'Apples', y: 12 },
-        { x: 'Bananas', y: 2 },
-        { x: 'Cranberries', y: 11 }
-    ]
-
     useEffect(() => {
         const hasBasket = localStorage.getItem("hasBasket");
 
         if (!hasBasket) {
             localStorage.setItem("hasBasket", true);
         } else {
-            // const basket = JSON.parse(localStorage.getItem("basket"));
 
             const mock = {
                 "content": [
