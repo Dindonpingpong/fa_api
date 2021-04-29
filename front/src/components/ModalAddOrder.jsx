@@ -59,10 +59,8 @@ const ModalAddOrder = ({ basket, clearBasket }) => {
             orderMenuRequestList: requestListMenus
         }
 
-        console.log(orderRequest);
-        const res = createOrder(orderRequest);
+        const res = await createOrder(orderRequest);
 
-        console.log(res);
         if (res.status === 201) {
 
             toggle();
@@ -71,7 +69,6 @@ const ModalAddOrder = ({ basket, clearBasket }) => {
 
     }
 
-    console.log(basket);
     return (
         <Col>
             <Button onClick={toggle} color="success">Оформить заказ</Button>

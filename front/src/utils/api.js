@@ -78,6 +78,13 @@ export const getAllProducts = () => {
     });
 }
 
+export const getAllMenu = () => {
+    return request({
+        url: API_BASE_URL + "/menu/all",
+        method: 'GET'
+    });
+}
+
 export const createOrder = (orderRequest) => {
     return request({
         url: API_BASE_URL + "/order",

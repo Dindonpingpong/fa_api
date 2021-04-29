@@ -47,7 +47,20 @@ public class MenuService {
         }
     }
 
-    public PagedResponse<MenuResponse> getAllMenu(int page, int size, boolean sortDesc) {
+    public List<MenuResponse> getAllMenu() {
+        List<MenuResponse> menuResponseList = new ArrayList<>();
+
+        menuRepository.findAll().forEach(menu -> {
+            List<ProductResponse> productResponseList = new ArrayList<>();
+
+            menu.getProductSet().forEach(product -> productResponseList.add(new ProductResponse(product.getId(),product.getName())));
+            menuResponseList.add(new MenuResponse(menu.getId(),menu.getName(),menu.getPrice(),menu.getWeight(),menu.isStatus(),productResponseList));
+        });
+
+        return menuResponseList;
+    }
+
+    public PagedResponse<MenuResponse> getAllMenuSorted(int page, int size, boolean sortDesc) {
         var sort = (sortDesc) ? DESC : ASC;
         Pageable pageable = PageRequest.of(page, size, sort, "name");
         Page<Menu> menus = menuRepository.findAll(pageable);

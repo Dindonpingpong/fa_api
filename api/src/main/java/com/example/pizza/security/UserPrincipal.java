@@ -27,18 +27,21 @@ public class UserPrincipal implements UserDetails {
     @JsonIgnore
     private final String email;
 
+    private final String address;
+
     @JsonIgnore
     private final String password;
 
     private final Collection<? extends GrantedAuthority> authorities;
 
-    public UserPrincipal(Long id, String firstName, String lastName, String username, String phone, String email, String password, Collection<? extends GrantedAuthority> authorities) {
+    public UserPrincipal(Long id, String firstName, String lastName, String username, String phone, String email, String address, String password, Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.username = username;
         this.phone = phone;
         this.email = email;
+        this.address = address;
         this.password = password;
         this.authorities = authorities;
     }
@@ -55,6 +58,7 @@ public class UserPrincipal implements UserDetails {
                 client.getUsername(),
                 client.getPhone(),
                 client.getEmail(),
+                client.getAddress(),
                 client.getPassword(),
                 authorities
         );

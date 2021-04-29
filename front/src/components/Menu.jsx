@@ -6,7 +6,7 @@ import {
 import ModalAddMenu from './ModalAddMenu';
 import Info from './Info';
 import ModalAddRedactMenu from './ModalRedactMenu';
-import { getAllProducts } from './../utils/api';
+import { getAllMenu, getAllProducts } from './../utils/api';
 
 const mock = {
     "content": [
@@ -440,9 +440,14 @@ const Menu = (props) => {
     useEffect(() => {
         const getProducts = async () => {
             const res = await getAllProducts();
+            const resMenu = await getAllMenu();
 
             if (res.status === 200) {
                 setAllProducts(res.data);
+            }
+
+            if (resMenu.status === 200) {
+                setFilteredContent(resMenu.data)
             }
         } 
 

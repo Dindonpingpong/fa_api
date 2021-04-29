@@ -1,12 +1,17 @@
 package com.example.pizza.controller;
 
-import com.example.pizza.payload.*;
+import com.example.pizza.payload.ApiResponse;
+import com.example.pizza.payload.MenuRequest;
+import com.example.pizza.payload.MenuResponse;
+import com.example.pizza.payload.PagedResponse;
 import com.example.pizza.service.MenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 import static com.example.pizza.util.AppConstants.*;
 import static org.springframework.http.HttpStatus.*;
@@ -23,7 +28,12 @@ public class MenuController {
     public PagedResponse<MenuResponse> getMenu(@RequestParam(value = "page", defaultValue = DEFAULT_PAGE_NUMBER) int page,
                                                @RequestParam(value = "size", defaultValue = DEFAULT_PAGE_SIZE) int size,
                                                @RequestParam(value = "sort", defaultValue = DEFAULT_SORT_TYPE) boolean sortDesc) {
-        return menuService.getAllMenu(page, size, sortDesc);
+        return menuService.getAllMenuSorted(page, size, sortDesc);
+    }
+
+    @GetMapping("/all")
+    public List<MenuResponse> getMenu() {
+        return menuService.getAllMenu();
     }
 
     @PutMapping("/{id}")
