@@ -7,9 +7,9 @@ import Menu from './components/Menu';
 import Basket from './components/Basket';
 import Profile from './components/Profile';
 import Stat from './components/Stat';
+import Products from './components/Products';
 
 const App = () => {
-  const [isLogged, changeLogged] = useState(false);
 
   return (
     <div>
@@ -20,6 +20,7 @@ const App = () => {
           <Route path='/register' component={Register} />
           <Route path='/basket' component={Basket} />
           <Route path='/profile' component={Profile} />
+          <Route path='/products' component={Products} />
           <Route path='/stat' component={Stat} />
           <Route path='*' component={Menu} />
         </Switch>
