@@ -1,19 +1,12 @@
 package com.example.pizza.controller;
 
-import com.example.pizza.model.Menu;
-import com.example.pizza.model.Product;
 import com.example.pizza.payload.*;
-import com.example.pizza.repository.MenuRepository;
-import com.example.pizza.repository.ProductRepository;
 import com.example.pizza.service.MenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static com.example.pizza.util.AppConstants.*;
 import static org.springframework.http.HttpStatus.*;

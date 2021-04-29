@@ -20,13 +20,13 @@ import static org.springframework.http.HttpStatus.*;
 
 @RestController
 @RequestMapping("/api/product")
-@PreAuthorize("hasRole('ADMIN')")
 public class ProductController {
 
     @Autowired
     ProductService productService;
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> createProduct(@RequestBody ProductRequest productRequest) {
         try {
             productService.createProduct(new Product(productRequest.getName()));
@@ -50,6 +50,7 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> updateProduct(@PathVariable long id, @RequestBody String name) {
         return new ResponseEntity<>(productService.updateProduct(name, id), OK);
     }

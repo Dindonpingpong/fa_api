@@ -5,6 +5,9 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -19,12 +22,18 @@ public class Order {
     @Column(columnDefinition = "varchar(128) default 'ordered'")
     private String status;
 
-    private LocalDate orderDate;
+    private LocalDateTime orderDate;
+
+    private String phone;
+
+    private String address;
 
     public Order(){};
 
-    public Order(LocalDate orderDate) {
+    public Order(LocalDateTime orderDate, String address, String phone) {
         this.orderDate = orderDate;
+        this.phone = phone;
+        this.address = address;
     }
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -36,7 +45,7 @@ public class Order {
     private Client client;
 
     @OneToMany(mappedBy = "order")
-    Set<Order_items> order_itemsSet;
+    List<Order_items> order_itemsSet = new LinkedList<>();
 
     public void addOrderItem(Order_items orderItem) {
         this.order_itemsSet.add(orderItem);

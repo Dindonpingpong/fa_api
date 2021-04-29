@@ -21,15 +21,14 @@ const Login = () => {
 
         const res = await loginFetch(user);
 
-        console.log(res);
 
         if (res.status == 401) {
             localStorage.setItem("isLogged", false);
             setMessage("Неверный логин или пароль");
         } else {
             localStorage.setItem("isLogged", true);
-            localStorage.setItem("accessToken", res.accessToken);
-            localStorage.setItem("isAdmin", res.roles.includes('ROLE_ADMIN'));
+            localStorage.setItem("accessToken", res.data.accessToken);
+            localStorage.setItem("isAdmin", res.data.roles.includes('ROLE_ADMIN'));
             history.push('/')
             window.location.reload();
         }

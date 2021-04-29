@@ -13,10 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static org.springframework.http.HttpStatus.CONFLICT;
 import static org.springframework.http.HttpStatus.CREATED;
@@ -40,18 +37,21 @@ public class OrderService {
         try {
             Client client = userRepository.getOne(orderRequest.getClientId());
 
-            Order order = new Order(LocalDate.now());
+            Order order = new Order(orderRequest.getOrderDate(), orderRequest.getAddress(), orderRequest.getPhone());
 
             client.addOrderItem(order);
             order.setClient(client);
             userRepository.save(client);
 
-            Set<Order_items> orderItems = new HashSet<>();
+            List<Order_items> orderItems = new LinkedList<>();
 
             orderRequest.getOrderMenuRequestList().forEach(menuOrder -> {
                 Menu curMenu = menuRepository.getOne(menuOrder.getId());
-                Order_items order_items = new Order_items(curMenu, order, menuOrder.getQuantity(), menuOrder.getSubtotal());
-                orderItems.add(order_items);
+                Order_items order_item = new Order_items(curMenu, order, menuOrder.getQuantity(), menuOrder.getSubtotal());
+//                order_itemsRepository.save(order_item);
+                curMenu.addOrderItem(order_item);
+                menuRepository.save(curMenu);
+                orderItems.add(order_item);
             });
 
             order.setOrder_itemsSet(orderItems);
@@ -75,7 +75,7 @@ public class OrderService {
                 OrderMenuRequest orderMenuRequest = new OrderMenuRequest(item.getId(), item.getQuantity(), item.getSubtotal());
                 orderMenuRequestsList.add(orderMenuRequest);
             });
-            OrderRequest orderRequest = new OrderRequest(order.getId(), orderMenuRequestsList);
+            OrderRequest orderRequest = new OrderRequest(order.getId(), order.getPhone(), order.getAddress(), order.getOrderDate(), orderMenuRequestsList);
             orderList.add(orderRequest);
         });
 

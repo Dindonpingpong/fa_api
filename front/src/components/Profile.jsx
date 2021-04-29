@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Card, CardBody, Container, Row, Col, Button, FormGroup, Label, Input } from 'reactstrap';
 
@@ -31,6 +31,8 @@ const InputForm = (props) => {
 
 const Profile = () => {
     const { username, hash } = useParams();
+    const [login, setLogin] = useState();
+    const [password, setPassword] = useState();
 
     const submit = () => { };
 

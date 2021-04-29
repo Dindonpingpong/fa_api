@@ -2,10 +2,12 @@ package com.example.pizza.controller;
 
 import com.example.pizza.exception.ResourceNotFoundException;
 import com.example.pizza.model.Client;
-import com.example.pizza.payload.*;
+import com.example.pizza.payload.UserIdentityAvailability;
+import com.example.pizza.payload.UserProfile;
+import com.example.pizza.payload.UserSummary;
 import com.example.pizza.repository.UserRepository;
-import com.example.pizza.security.UserPrincipal;
 import com.example.pizza.security.CurrentUser;
+import com.example.pizza.security.UserPrincipal;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,15 +18,15 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api")
 public class UserController {
 
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
     @Autowired
     private UserRepository userRepository;
-
-    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @GetMapping("/user/me")
     @PreAuthorize("hasRole('USER')")
     public UserSummary getCurrentUser(@CurrentUser UserPrincipal currentUser) {
-        UserSummary userSummary = new UserSummary(currentUser.getId(), currentUser.getUsername(), currentUser.getName());
+        UserSummary userSummary = new UserSummary(currentUser.getId(), currentUser.getUsername(),
+                currentUser.getFirstName(), currentUser.getLastName(), currentUser.getEmail(), currentUser.getPhone());
         return userSummary;
     }
 

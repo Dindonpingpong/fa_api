@@ -24,7 +24,7 @@ const request = (options) => {
             return response.json().then(json => {
                 return {
                     status: response.status,
-                    ...json
+                    data: json
                 }
             })
         });
@@ -68,5 +68,20 @@ export const getCurrentUser = () => {
     return request({
         url: API_BASE_URL + "/user/me",
         method: 'GET'
+    });
+}
+
+export const getAllProducts = () => {
+    return request({
+        url: API_BASE_URL + "/product/all",
+        method: 'GET'
+    });
+}
+
+export const createOrder = (orderRequest) => {
+    return request({
+        url: API_BASE_URL + "/order",
+        method: 'POST',
+        body: JSON.stringify(orderRequest)
     });
 }

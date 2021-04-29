@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -41,11 +42,15 @@ public class Menu {
     private Set<Product> productSet = new HashSet<>();
 
     @OneToMany(mappedBy = "menu")
-    Set<Order_items> order_itemsSet = new HashSet<>();
+    List<Order_items> order_itemsSet = new LinkedList<>();
 
     public void addProduct(List<Product> products) {
         productSet.addAll(products);
         products.forEach(product -> product.getMenuSet().add(this));
+    }
+
+    public void addOrderItem(Order_items orderItem) {
+        this.order_itemsSet.add(orderItem);
     }
 
     @Override

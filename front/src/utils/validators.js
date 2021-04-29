@@ -6,7 +6,7 @@ const checkExist = async (value, type) => {
         :
         await checkEmailAvailability(value);
 
-    return res.available;
+    return res.data.available;
 }
 
 export const validateLogin = async (value) => {

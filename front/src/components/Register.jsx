@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Card, CardBody, Container, Row, Col, Button, FormGroup, Label, Input, FormFeedback } from 'reactstrap';
 import { validateEmail, validateFirstName, validateLastName, validateLogin, validatePassword, validatePhone } from './../utils/validators';
+import { signup } from './../utils/api';
+import Info from './Info';
 
 const InputForm = ({ name, text, type, set, validate }) => {
     const [isValid, toggleValid] = useState('');
@@ -9,7 +11,7 @@ const InputForm = ({ name, text, type, set, validate }) => {
     const onChange = async (e) => {
         const value = e.target.value;
         const result = await validate(value);
-        
+
         if (result === 'ok') {
             toggleValid('is-valid');
             set(value);
@@ -41,10 +43,32 @@ const InputForm = ({ name, text, type, set, validate }) => {
 const Register = (props) => {
     const [login, setLogin] = useState();
     const [password, setPassword] = useState();
+    const [email, setEmail] = useState();
+    const [lastName, setLastName] = useState();
+    const [firstName, setFirstName] = useState();
+    const [phone, setPhone] = useState();
+    const [message, setMessage] = useState();
+    const [isSuccess, setSuccess] = useState();
 
+    const submit = async () => {
+        const signupBody = {
+            firstName: firstName,
+            lastName: lastName,
+            username: login,
+            phone: phone,
+            email: email,
+            password: password
+        }
 
-    const submit = () => { 
+        const res = await signup(signupBody);
 
+        if (res.status === 201) {
+            setSuccess(true);
+            setMessage("Вы успешно зарегистрированы!");
+        } else {
+            setSuccess(false);
+            setMessage("Что-то пошло не так. Попробуйте еще раз");
+        }
     };
 
     return (
@@ -54,12 +78,16 @@ const Register = (props) => {
                     <Col md={6} className="m-auto">
                         <Card className="mb-4 shadow-sm">
                             <CardBody>
-                                <InputForm name="Login" text="Логин" type="text" set={setLogin} validate={validateLogin}/>
-                                <InputForm name="Email" text="Почта" type="email" set={setPassword} validate={validateEmail}/>
-                                <InputForm name="lastName" text="Фамилия" type="text" set={setPassword} validate={validateLastName}/>
-                                <InputForm name="firstName" text="Имя" type="text" set={setPassword} validate={validateFirstName}/>
-                                <InputForm name="phone" text="Телефон" type="tel" set={setPassword} validate={validatePhone}/>
-                                <InputForm name="Password" text="Пароль" type="password" set={setPassword} validate={validatePassword}/>
+                                {
+                                    message &&
+                                    <Info message={message} setMessage={setMessage} isSuccess={isSuccess} />
+                                }
+                                <InputForm name="Login" text="Логин" type="text" set={setLogin} validate={validateLogin} />
+                                <InputForm name="Email" text="Почта" type="email" set={setEmail} validate={validateEmail} />
+                                <InputForm name="lastName" text="Фамилия" type="text" set={setLastName} validate={validateLastName} />
+                                <InputForm name="firstName" text="Имя" type="text" set={setFirstName} validate={validateFirstName} />
+                                <InputForm name="phone" text="Телефон" type="tel" set={setPhone} validate={validatePhone} />
+                                <InputForm name="Password" text="Пароль" type="password" set={setPassword} validate={validatePassword} />
 
                                 <Col>
                                     <Button className="login-btn" onClick={submit}>Зарегистрироваться</Button>

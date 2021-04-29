@@ -12,7 +12,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-@Component
+//@Component
 public class MenuLoader implements CommandLineRunner {
     private final MenuRepository menuRepository;
     private final ProductRepository productRepository;

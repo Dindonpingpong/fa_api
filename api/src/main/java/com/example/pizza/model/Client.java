@@ -31,6 +31,8 @@ public class Client extends DateAudit {
 
     private String username;
 
+    private String phone;
+
     @NaturalId
     private String email;
 
@@ -56,10 +58,11 @@ public class Client extends DateAudit {
         this.orders.add(order);
     }
 
-    public Client(String firstName, String lastName, String username, String email, String password) {
+    public Client(String firstName, String lastName, String username, String phone, String email, String password) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.username = username;
+        this.phone = phone;
         this.email = email;
         this.password = password;
     }

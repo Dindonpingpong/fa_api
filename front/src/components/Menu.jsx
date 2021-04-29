@@ -3,9 +3,10 @@ import {
     Container, Row, Col, Button, Card, CardBody,
     CardImg, CardTitle, Badge, ListGroup, ListGroupItem, Input, FormGroup
 } from 'reactstrap';
-import ModalAdd from './ModalAdd';
+import ModalAddMenu from './ModalAddMenu';
 import Info from './Info';
 import ModalAddRedactMenu from './ModalRedactMenu';
+import { getAllProducts } from './../utils/api';
 
 const mock = {
     "content": [
@@ -312,7 +313,7 @@ const Filter = ({ content, setFilteredContent, isAdmin }) => {
 
             {
                 isAdmin &&
-                <ModalAdd
+                <ModalAddMenu
                     buttonLabel="Добавить пиццу"
                 />
             }
@@ -320,7 +321,7 @@ const Filter = ({ content, setFilteredContent, isAdmin }) => {
     );
 }
 
-const AdditionalInfo = ({ basket, setBasket, id, name, price, weight, products, status, isAdmin, setMessage }) => {
+const AdditionalInfo = ({ basket, setBasket, id, name, price, weight, products, status, isAdmin, setMessage, allProducts }) => {
     let additionalInfo;
 
     const addToBasket = () => {
@@ -356,6 +357,7 @@ const AdditionalInfo = ({ basket, setBasket, id, name, price, weight, products, 
                     defaultWeight={weight}
                     defaultProducts={products}
                     clearBasket={setBasket}
+                    allProducts={allProducts}
                 />
             }
             {additionalInfo}
@@ -363,7 +365,7 @@ const AdditionalInfo = ({ basket, setBasket, id, name, price, weight, products, 
     )
 }
 
-const MenuCards = ({ content, basket, setBasket, isAdmin, setMessage }) => {
+const MenuCards = ({ content, basket, setBasket, isAdmin, setMessage, allProducts }) => {
     let listItems;
 
     if (content && content.length > 0) {
@@ -395,6 +397,7 @@ const MenuCards = ({ content, basket, setBasket, isAdmin, setMessage }) => {
                                     isAdmin={isAdmin}
                                     status={status}
                                     setMessage={setMessage}
+                                    allProducts={allProducts}
                                 />
                             </ListGroup>
                         </CardBody>
@@ -413,6 +416,7 @@ const Menu = (props) => {
     const [isAdmin, setAdmin] = useState();
     const [basket, setBasket] = useState([]);
     const [filteredContent, setFilteredContent] = useState();
+    const [allProducts, setAllProducts] = useState();
     const [message, setMessage] = useState();
 
     useEffect(() => {
@@ -432,6 +436,18 @@ const Menu = (props) => {
     useEffect(() => {
         localStorage.setItem("basket", JSON.stringify(basket));
     }, [basket])
+
+    useEffect(() => {
+        const getProducts = async () => {
+            const res = await getAllProducts();
+
+            if (res.status === 200) {
+                setAllProducts(res.data);
+            }
+        } 
+
+        getProducts();
+    }, [])
 
     return (
         <section className="catalog">
@@ -455,6 +471,7 @@ const Menu = (props) => {
                     setBasket={setBasket}
                     isAdmin={isAdmin}
                     setMessage={setMessage}
+                    allProducts={allProducts}
                 />
             </Container>
         </section>

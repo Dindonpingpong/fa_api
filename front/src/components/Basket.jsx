@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Card, CardBody, Container, Row, Col, Button, FormGroup, Label, Input,
-     ListGroup, ListGroupItem, Badge, CardTitle, CardFooter, CardText, CardHeader, Alert } from 'reactstrap';
+import {
+    Card, CardBody, Container, Row, Col, Button, FormGroup, Label, Input,
+    ListGroup, ListGroupItem, Badge, CardTitle, CardFooter, CardText, CardHeader, Alert
+} from 'reactstrap';
 import ModalAddOrder from './ModalAddOrder';
 
 const RemoveFromBasketButton = ({ id, basket, setBasket }) => {
@@ -76,9 +78,6 @@ const Basket = () => {
     const [isLogged, setLogged] = useState();
     const [basket, setBasket] = useState([]);
     const [total, setTotal] = useState(0);
-    const [name, setName] = useState();
-    const [phone, setPhone] = useState();
-    const [orderTime, setOrderTime] = useState();
 
     useEffect(() => {
         const logged = (localStorage.getItem('isLogged') === 'true') ? true : false;
@@ -130,9 +129,7 @@ const Basket = () => {
                                     {
                                         isLogged && basket.length > 0 &&
                                         <ModalAddOrder
-                                            setName={setName}
-                                            setPhone={setPhone}
-                                            setOrderTime={setOrderTime}
+                                            basket={basket}
                                             clearBasket={clearBasket}
                                         />
                                     }
