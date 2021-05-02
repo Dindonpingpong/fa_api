@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 import static org.springframework.http.HttpStatus.*;
 
 @RestController
@@ -23,8 +25,13 @@ public class EmployeeController {
         try {
             employeeService.createEmployee(new Employee(employeeRequest.getFirstName(), employeeRequest.getLastName(), employeeRequest.getTelephone(), employeeRequest.getHireDate()));
             return new ResponseEntity<>(new ApiResponse(true, "Employee created"), CREATED);
-        } catch (DataAccessException exception) {
+        } catch (Exception e) {
             return new ResponseEntity<>(new ApiResponse(false, "Employee did not create"), INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @GetMapping("/all")
+    public List<EmployeeResponse> getEmployees() {
+        return employeeService.getAllEmployees();
     }
 }

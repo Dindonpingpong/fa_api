@@ -31,7 +31,7 @@ public class ProductController {
         try {
             productService.createProduct(new Product(productRequest.getName()));
             return new ResponseEntity<>(new ApiResponse(true, "Product created"), CREATED);
-        } catch (DataAccessException exception) {
+        } catch (Exception e) {
             return new ResponseEntity<>(new ApiResponse(false, "Product did not create"), INTERNAL_SERVER_ERROR);
         }
     }
@@ -55,4 +55,9 @@ public class ProductController {
         return new ResponseEntity<>(productService.updateProduct(name, id), OK);
     }
 
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> deleteProduct(@PathVariable long id) {
+        return new ResponseEntity<>(productService.deleteProduct(id), OK);
+    }
 }

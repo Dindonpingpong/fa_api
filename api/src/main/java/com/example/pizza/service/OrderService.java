@@ -1,19 +1,15 @@
 package com.example.pizza.service;
 
 import com.example.pizza.model.*;
-import com.example.pizza.payload.ApiResponse;
-import com.example.pizza.payload.OrderMenuRequest;
-import com.example.pizza.payload.OrderRequest;
-import com.example.pizza.repository.MenuRepository;
-import com.example.pizza.repository.OrderRepository;
-import com.example.pizza.repository.Order_ItemsRepository;
-import com.example.pizza.repository.UserRepository;
+import com.example.pizza.payload.*;
+import com.example.pizza.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 import static org.springframework.http.HttpStatus.CONFLICT;
 import static org.springframework.http.HttpStatus.CREATED;
@@ -31,7 +27,11 @@ public class OrderService {
     UserRepository userRepository;
 
     @Autowired
+    EmployeeRepository employeeRepository;
+
+    @Autowired
     Order_ItemsRepository order_itemsRepository;
+
 
     public ResponseEntity<?> createOrder(OrderRequest orderRequest) {
         try {
@@ -48,7 +48,6 @@ public class OrderService {
             orderRequest.getOrderMenuRequestList().forEach(menuOrder -> {
                 Menu curMenu = menuRepository.getOne(menuOrder.getId());
                 Order_items order_item = new Order_items(curMenu, order, menuOrder.getQuantity(), menuOrder.getSubtotal());
-//                order_itemsRepository.save(order_item);
                 curMenu.addOrderItem(order_item);
                 menuRepository.save(curMenu);
                 orderItems.add(order_item);
@@ -64,21 +63,59 @@ public class OrderService {
         }
     }
 
-    public List<OrderRequest> getAllOrders() {
+    public List<OrderResponse> getAllOrders() {
         List<Order> orders = orderRepository.findAll();
 
-        List<OrderRequest> orderList = new ArrayList<>();
-        orders.forEach(order ->
-        {
-            List<OrderMenuRequest> orderMenuRequestsList = new ArrayList<>();
+        List<OrderResponse> orderResponseList = new ArrayList<>();
+
+        orders.forEach(order -> {
+            Client client = order.getClient();
+
+            List<OrderMenuResponse> orderMenuResponseList = new ArrayList<>();
             order.getOrder_itemsSet().forEach(item -> {
-                OrderMenuRequest orderMenuRequest = new OrderMenuRequest(item.getId(), item.getQuantity(), item.getSubtotal());
-                orderMenuRequestsList.add(orderMenuRequest);
+                OrderMenuResponse orderMenuResponse = new OrderMenuResponse(item.getMenu().getName(),
+                        item.getQuantity(), item.getSubtotal());
+                orderMenuResponseList.add(orderMenuResponse);
             });
-            OrderRequest orderRequest = new OrderRequest(order.getId(), order.getPhone(), order.getAddress(), order.getOrderDate(), orderMenuRequestsList);
-            orderList.add(orderRequest);
+
+            Employee employee = order.getEmployee();
+
+            EmployeeResponse employeeResponse;
+            if (employee != null) {
+                employeeResponse = new EmployeeResponse(employee.getId(),
+                        employee.getFirstName(),
+                        employee.getLastName(),
+                        employee.getTelephone(),
+                        employee.getHireDate());
+            } else {
+                employeeResponse = new EmployeeResponse(null, null, null, null, null);
+            }
+
+            OrderResponse orderResponse = new OrderResponse(order.getId(),
+                    order.getStatus(),
+                    client.getFirstName(), client.getLastName(),
+                    client.getPhone(), order.getAddress(),
+                    order.getOrderDate(), employeeResponse, orderMenuResponseList);
+
+            orderResponseList.add(orderResponse);
         });
 
-        return orderList;
+        return orderResponseList;
+    }
+
+    public void deleteOrder(long orderId) {
+        Order order = orderRepository.getOne(orderId);
+        order.setStatus("deleted");
+        orderRepository.save(order);
+    }
+
+    public void addEmployeeToOrder(long orderId, long employeeId) {
+        Order order = orderRepository.getOne(orderId);
+        Employee employee = employeeRepository.getOne(employeeId);
+
+        employee.addOrder(order);
+        order.setEmployee(employee);
+        employeeRepository.save(employee);
+        orderRepository.save(order);
     }
 }

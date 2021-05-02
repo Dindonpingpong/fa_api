@@ -4,6 +4,7 @@ import com.example.pizza.model.Product;
 import com.example.pizza.payload.ApiResponse;
 import com.example.pizza.payload.PagedResponse;
 import com.example.pizza.payload.ProductResponse;
+import com.example.pizza.repository.MenuRepository;
 import com.example.pizza.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -11,7 +12,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 
 import static org.springframework.data.domain.Sort.Direction.ASC;
 import static org.springframework.data.domain.Sort.Direction.DESC;
@@ -21,6 +25,9 @@ public class ProductService {
 
     @Autowired
     private ProductRepository productRepository;
+
+    @Autowired
+    private MenuRepository menuRepository;
 
     public void createProduct(Product product) {
         productRepository.save(product);
@@ -52,6 +59,18 @@ public class ProductService {
             return new ApiResponse(true, "Product updated");
         } else {
             return new ApiResponse(false, "Product not found");
+        }
+    }
+
+    public ApiResponse deleteProduct(long id) {
+        try {
+            menuRepository.findAll().forEach(menu -> {
+                menu.deleteProduct(productRepository.getOne(id));
+            });
+            productRepository.deleteById(id);
+            return new ApiResponse(true, "Product deleted");
+        } catch (Exception e) {
+            return new ApiResponse(false, e.getMessage());
         }
     }
 

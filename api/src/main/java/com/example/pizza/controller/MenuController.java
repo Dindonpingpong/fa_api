@@ -42,7 +42,7 @@ public class MenuController {
         return new ResponseEntity<>(menuService.updateMenu(id, menuRequest), OK);
     }
 
-    @PostMapping("/add")
+    @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> addNewItemMenu(@RequestBody MenuRequest menuRequest) {
         try {

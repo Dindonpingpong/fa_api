@@ -19,7 +19,6 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(columnDefinition = "varchar(128) default 'ordered'")
     private String status;
 
     private LocalDateTime orderDate;
@@ -34,6 +33,7 @@ public class Order {
         this.orderDate = orderDate;
         this.phone = phone;
         this.address = address;
+        this.status = "ordered";
     }
 
     @ManyToOne(fetch = FetchType.EAGER)

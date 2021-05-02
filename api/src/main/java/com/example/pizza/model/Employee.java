@@ -73,6 +73,10 @@ public class Employee {
     @OneToMany(mappedBy = "employee")
     private Set<Order> orders;
 
+    public void addOrder(Order order) {
+        orders.add(order);
+    }
+
     @Override
     public String toString() {
         return "Employee{" +

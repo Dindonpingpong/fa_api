@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Col, Row, Card, CardBody, NavLink, Input } from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Col } from 'reactstrap';
 import InputForm from './InputForm';
 import { getCurrentUser, createOrder } from './../utils/api';
 
@@ -12,15 +12,19 @@ const ModalAddOrder = ({ basket, clearBasket }) => {
     const [phone, setPhone] = useState();
     const [orderTime, setOrderTime] = useState();
 
-    useEffect(async () => {
-        const res = await getCurrentUser();
+    useEffect(() => {
+        const setDefault = async () => {
+            const res = await getCurrentUser();
 
-        if (res.status === 200) {
-            setDefaultPhone(res.data.phone);
-            setDefaultAdress(res.data.address);
-            setId(res.data.id)
-            console.log(res);
+            if (res.status === 200) {
+                setDefaultPhone(res.data.phone);
+                setDefaultAdress(res.data.address);
+                setId(res.data.id)
+                console.log(res);
+            }
         }
+
+        setDefault();
     }, []);
 
     const toggle = () => setModal(!modal);
@@ -32,7 +36,7 @@ const ModalAddOrder = ({ basket, clearBasket }) => {
         let requestListMenus = [];
 
         basket.forEach(menu => {
-            const { id, name, price } = menu;
+            const { id, price } = menu;
             let item;
 
             if (mapItems.has(id)) {
@@ -40,7 +44,7 @@ const ModalAddOrder = ({ basket, clearBasket }) => {
                 item.subtotal += price;
                 item.quantity += 1;
             } else {
-                item = new Object();
+                item = {};
                 item.subtotal = price;
                 item.quantity = 1;
             }

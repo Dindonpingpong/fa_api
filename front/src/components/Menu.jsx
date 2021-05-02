@@ -210,7 +210,7 @@ const ProductList = ({ products }) => {
     );
 }
 
-const Filter = ({ content, setFilteredContent, isAdmin }) => {
+const Filter = ({ content, setFilteredContent, isAdmin, allProducts }) => {
     const [search, setSearch] = useState("");
     const [sortOption, setOption] = useState("priceDesc");
     const size = (isAdmin) ? '2' : '4';
@@ -258,7 +258,7 @@ const Filter = ({ content, setFilteredContent, isAdmin }) => {
                     return 0;
                 };
                 break
-            case "nameAsc":
+            case "nameDesc":
                 sortFunc = (a, b) => {
                     if (a.name < b.name)
                         return 1;
@@ -281,7 +281,7 @@ const Filter = ({ content, setFilteredContent, isAdmin }) => {
         filtered.sort(sortFunc);
 
         setFilteredContent(filtered);
-    }, [search, sortOption])
+    }, [search, sortOption, setFilteredContent, content])
 
     return (
         <Row className="catalog-sort-filter">
@@ -315,6 +315,7 @@ const Filter = ({ content, setFilteredContent, isAdmin }) => {
                 isAdmin &&
                 <ModalAddMenu
                     buttonLabel="Добавить пиццу"
+                    products={allProducts}
                 />
             }
         </Row>
@@ -325,7 +326,7 @@ const AdditionalInfo = ({ basket, setBasket, id, name, price, weight, products, 
     let additionalInfo;
 
     const addToBasket = () => {
-        let orderItem = new Object();
+        let orderItem = {};
         orderItem.id = id;
         orderItem.name = name;
         orderItem.price = price;
@@ -461,6 +462,7 @@ const Menu = (props) => {
                     isAdmin={isAdmin}
                     content={mock.content}
                     setFilteredContent={setFilteredContent}
+                    allProducts={allProducts}
                 />
                 {
                     message &&
@@ -471,7 +473,7 @@ const Menu = (props) => {
                     </Row>
                 }
                 <MenuCards
-                    content={filteredContent || mock.content}
+                    content={filteredContent}
                     basket={basket}
                     setBasket={setBasket}
                     isAdmin={isAdmin}

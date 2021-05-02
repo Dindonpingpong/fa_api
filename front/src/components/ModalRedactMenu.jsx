@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Col, Row, Card, CardBody, NavLink, Input, Label } from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Col, Input, Label } from 'reactstrap';
 import InputForm from './InputForm';
 
 const ModalAddRedactMenu = ({ defaultName, defaultPrice, defaultWeight, defaultProducts, clearBasket, allProducts }) => {
@@ -17,10 +17,13 @@ const ModalAddRedactMenu = ({ defaultName, defaultPrice, defaultWeight, defaultP
         clearBasket();
     }
 
-    useEffect(async () => {
-        setChosen(defaultProducts.map((product) => product.id.toString()));
+    useEffect(() => {
+        const set = async () => {
+            setChosen(defaultProducts.map((product) => product.id.toString()));
+        }
 
-    }, [])
+        set();
+    }, [defaultProducts])
 
     if (allProducts) {
         listProducts = allProducts.map((product, item) =>

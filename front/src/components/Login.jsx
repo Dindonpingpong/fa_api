@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { useHistory, useParams, withRouter } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { Card, CardBody, Container, Row, Col, Button, NavLink } from 'reactstrap';
 import InputForm from './InputForm';
 import Info from './Info';
@@ -22,7 +22,7 @@ const Login = () => {
         const res = await loginFetch(user);
 
 
-        if (res.status == 401) {
+        if (res.status === 401) {
             localStorage.setItem("isLogged", false);
             setMessage("Неверный логин или пароль");
         } else {

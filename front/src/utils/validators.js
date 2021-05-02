@@ -54,8 +54,16 @@ export const validatePhone = async (value) => {
     return 'ok';
 }
 
+export const validateAddress = async (value) => {
+    const regex = /^[А-я0-9]{1,}$/;
+
+    if (!value.match(regex))
+        return 'Адрес может включать только А-я, 0-9';
+    return 'ok';
+}
+
 export const validatePassword = async (value) => {
-    if (value.length > 6)
-        return 'Простой пароль. Усложните';
+    if (value.length < 6)
+        return 'Простой пароль. Усложните до 6 символов минимум';
     return 'ok';
 }

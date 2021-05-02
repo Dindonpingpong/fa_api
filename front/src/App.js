@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Route, Switch, BrowserRouter as Router } from 'react-router-dom';
 import Header from './components/Header';
 import Login from './components/Login';
@@ -8,6 +8,7 @@ import Basket from './components/Basket';
 import Profile from './components/Profile';
 import Stat from './components/Stat';
 import Products from './components/Products';
+import Orders from './components/Orders';
 
 const App = () => {
 
@@ -21,6 +22,7 @@ const App = () => {
           <Route path='/basket' component={Basket} />
           <Route path='/profile' component={Profile} />
           <Route path='/products' component={Products} />
+          <Route path='/orders' component={Orders} />
           <Route path='/stat' component={Stat} />
           <Route path='*' component={Menu} />
         </Switch>

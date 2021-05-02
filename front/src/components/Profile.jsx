@@ -1,28 +1,44 @@
-import React, { useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { Card, CardBody, Container, Row, Col, Button, FormGroup, Label, Input } from 'reactstrap';
+import React, { useState, useEffect } from 'react';
+import { Card, CardBody, Container, Row, Col, Button, FormGroup, Label, Input, FormFeedback } from 'reactstrap';
+import { validateEmail, validateFirstName, validateLastName, validateLogin, validatePassword, validatePhone, validateAddress } from './../utils/validators';
+import { getCurrentUser } from './../utils/api';
 
-const InputForm = (props) => {
-    const { name, text, type, set } = props;
+const InputForm = ({ name, defaultValue, text, type, set, validate }) => {
+    const [isValid, toggleValid] = useState('');
+    const [feedback, setFeedback] = useState('');
+
+    const onChange = async (e) => {
+        const value = e.target.value;
+        if (value !== defaultValue) {
+            const result = await validate(value);
+
+            if (result === 'ok') {
+                toggleValid('is-valid');
+                set(value);
+            } else {
+                toggleValid('is-invalid');
+                setFeedback(result);
+            }
+        } else {
+            toggleValid('is-valid');
+            set(value);
+        }
+    }
 
     return (
         <Col>
             <FormGroup>
                 <Label className="font-profile-head">
-                    <Row>
-                        <Col>
-                            {text}
-                        </Col>
-                        <Col>
-                            <Input
-                                type={type}
-                                name={name}
-                                onChange={e => set(e.target.value)}
-                                defaultValue="fds"
-                                required
-                            />
-                        </Col>
-                    </Row>
+                    {text}
+                    <Input
+                        defaultValue={defaultValue}
+                        type={type}
+                        name={name}
+                        onChange={onChange}
+                        className={isValid}
+                        required
+                    />
+                    <FormFeedback>{feedback}</FormFeedback>
                 </Label>
             </FormGroup>
         </Col>
@@ -30,19 +46,45 @@ const InputForm = (props) => {
 }
 
 const Profile = () => {
-    const { username, hash } = useParams();
     const [login, setLogin] = useState();
+    const [email, setEmail] = useState();
+    const [lastName, setLastName] = useState();
+    const [firstName, setFirstName] = useState();
+    const [phone, setPhone] = useState();
+    const [address, setAddress] = useState();
     const [password, setPassword] = useState();
+    const [defaultLogin, setDefaultLogin] = useState();
+    const [defaultEmail, setDefaultEmail] = useState();
+    const [defaultLastName, setDefaultLastName] = useState();
+    const [defaultFirstName, setDefaultFirstName] = useState();
+    const [defaultPhone, setDefaultPhone] = useState();
+    const [defaultAddress, setDefaultAddress] = useState();
+    const [defaultMessage, setDefaultMessage] = useState();
+    const [isSuccess, setSuccess] = useState();
 
-    const submit = () => { };
+    useEffect(() => {
 
-    if (username && hash) {
-        const data = {
-            username: username,
-            hash: hash
+        const getInfo = async () => {
+            const res = await getCurrentUser();
+
+            if (res.status === 200) {
+                const { username, firstName, lastName, email, address, phone } = res.data;
+
+                setDefaultLogin(username);
+                setDefaultFirstName(firstName);
+                setDefaultLastName(lastName);
+                setDefaultEmail(email);
+                setDefaultAddress(address);
+                setDefaultPhone(phone);
+            }
         };
 
-    }
+        getInfo();
+    }, []);
+
+    const submit = async () => { 
+        
+    };
 
     return (
         <section className="login">
@@ -51,12 +93,20 @@ const Profile = () => {
                     <Col md={6} className="m-auto">
                         <Card className="mb-4 shadow-sm">
                             <CardBody>
-                                <InputForm name="Login" text="Логин" type="text" set={setLogin} />
-                                <InputForm name="Password" text="Почта" type="email" set={setPassword} />
-                                <InputForm name="Password" text="Фамилия" type="text" set={setPassword} />
-                                <InputForm name="Password" text="Имя" type="text" set={setPassword} />
-                                <InputForm name="Password" text="Телефон" type="tel" set={setPassword} />
-                                <InputForm name="Password" text="Новый пароль" type="password" set={setPassword} />
+                                <InputForm name="login" text="Логин" type="text" set={setLogin}
+                                    validate={validateLogin} defaultValue={defaultLogin} />
+                                <InputForm name="email" text="Почта" type="email" set={setEmail}
+                                    validate={validateEmail} defaultValue={defaultEmail} />
+                                <InputForm name="lastName" text="Фамилия" type="text" set={setLastName}
+                                    validate={validateLastName} defaultValue={defaultLastName} lastName />
+                                <InputForm name="firstName" text="Имя" type="text" set={setFirstName}
+                                    validate={validateFirstName} defaultValue={defaultFirstName} />
+                                <InputForm name="phone" text="Телефон" type="tel" set={setPhone}
+                                    validate={validatePhone} defaultValue={defaultPhone} />
+                                <InputForm name="address" text="Адрес" type="text" set={setAddress}
+                                    validate={validateAddress} defaultValue={defaultAddress} />
+                                <InputForm name="password" text="Пароль" type="password" set={setPassword}
+                                    validate={validatePassword} defaultValue='' />
 
                                 <Col>
                                     <Button className="login-btn" onClick={submit}>Редактировать</Button>

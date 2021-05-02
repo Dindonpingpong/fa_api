@@ -78,10 +78,41 @@ export const getAllProducts = () => {
     });
 }
 
+export const createProduct = (orderRequest) => {
+    return request({
+        url: API_BASE_URL + "/product",
+        method: 'POST',
+        body: JSON.stringify(orderRequest)
+    });
+}
+
 export const getAllMenu = () => {
     return request({
         url: API_BASE_URL + "/menu/all",
         method: 'GET'
+    });
+}
+
+export const deleteMenu = (id) => {
+    return request({
+        url: API_BASE_URL + "/menu/" + id,
+        method: "DELETE"
+    })
+}
+
+export const createMenu = (menuRequest) => {
+    return request({
+        url: API_BASE_URL + "/menu",
+        method: 'POST',
+        body: JSON.stringify(menuRequest)
+    });
+}
+
+export const updateMenu = (id, menuRequest) => {
+    return request({
+        url: API_BASE_URL + "/menu/" + id,
+        method: 'PUT',
+        body: JSON.stringify(menuRequest)
     });
 }
 

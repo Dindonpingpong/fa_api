@@ -12,7 +12,7 @@ const Info = ({ isSuccess, message, setMessage, styled }) => {
                 setMessage(null);
             }, 5000);
         }
-    }, [isVisible]);
+    }, [isVisible, setMessage]);
 
     if (!styled) {
         return (

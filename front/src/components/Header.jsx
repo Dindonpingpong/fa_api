@@ -64,7 +64,7 @@ const Header = () => {
                             {
                                 isLogged && isAdmin &&
                                 <NavItem>
-                                    <NavLink href='/products'>
+                                    <NavLink href='/orders'>
                                         Заказы
                                     </NavLink>
                                 </NavItem>

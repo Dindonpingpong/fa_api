@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Col, Row, Card, CardBody, NavLink, Input } from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Col, Input, Label } from 'reactstrap';
 import InputForm from './InputForm';
 
 
@@ -40,6 +40,7 @@ const ModalAddMenu = ({ buttonLabel, products }) => {
                     <InputForm name="Name" text="Название" type="text" set={setName} horizontal />
                     <InputForm name="Price" text="Цена" type="number" set={setName} horizontal />
                     <InputForm name="Weight" text="Вес" type="number" set={setName} horizontal />
+                    <Label className="font-profile-head">Продукты</Label>
                     <Input type='select' multiple className="text-capitalize" onChange={e => multipleHandle(e, products, chosenProducts)}>
                         {listProducts}
                     </Input>

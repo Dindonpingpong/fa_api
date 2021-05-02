@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Card, CardBody, Container, Row, Col, Button, FormGroup, Label, Input, FormFeedback } from 'reactstrap';
-import { validateEmail, validateFirstName, validateLastName, validateLogin, validatePassword, validatePhone } from './../utils/validators';
+import { validateEmail, validateFirstName, validateLastName, validateLogin, validatePassword, validatePhone, validateAddress } from './../utils/validators';
 import { signup } from './../utils/api';
 import Info from './Info';
 
@@ -40,13 +40,14 @@ const InputForm = ({ name, text, type, set, validate }) => {
     );
 }
 
-const Register = (props) => {
+const Register = () => {
     const [login, setLogin] = useState();
     const [password, setPassword] = useState();
     const [email, setEmail] = useState();
     const [lastName, setLastName] = useState();
     const [firstName, setFirstName] = useState();
     const [phone, setPhone] = useState();
+    const [address, setAddress] = useState();
     const [message, setMessage] = useState();
     const [isSuccess, setSuccess] = useState();
 
@@ -57,6 +58,7 @@ const Register = (props) => {
             username: login,
             phone: phone,
             email: email,
+            address: address,
             password: password
         }
 
@@ -82,12 +84,13 @@ const Register = (props) => {
                                     message &&
                                     <Info message={message} setMessage={setMessage} isSuccess={isSuccess} />
                                 }
-                                <InputForm name="Login" text="Логин" type="text" set={setLogin} validate={validateLogin} />
-                                <InputForm name="Email" text="Почта" type="email" set={setEmail} validate={validateEmail} />
+                                <InputForm name="login" text="Логин" type="text" set={setLogin} validate={validateLogin} />
+                                <InputForm name="email" text="Почта" type="email" set={setEmail} validate={validateEmail} />
                                 <InputForm name="lastName" text="Фамилия" type="text" set={setLastName} validate={validateLastName} />
                                 <InputForm name="firstName" text="Имя" type="text" set={setFirstName} validate={validateFirstName} />
                                 <InputForm name="phone" text="Телефон" type="tel" set={setPhone} validate={validatePhone} />
-                                <InputForm name="Password" text="Пароль" type="password" set={setPassword} validate={validatePassword} />
+                                <InputForm name="address" text="Адрес" type="text" set={setAddress} validate={validateAddress} />
+                                <InputForm name="password" text="Пароль" type="password" set={setPassword} validate={validatePassword} />
 
                                 <Col>
                                     <Button className="login-btn" onClick={submit}>Зарегистрироваться</Button>

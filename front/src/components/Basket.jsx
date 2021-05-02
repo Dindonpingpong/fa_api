@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {
-    Card, CardBody, Container, Row, Col, Button, FormGroup, Label, Input,
-    ListGroup, ListGroupItem, Badge, CardTitle, CardFooter, CardText, CardHeader, Alert
+    Card, CardBody, Container, Row, Col, Button, ListGroup,
+    ListGroupItem, Badge, CardTitle, CardFooter, CardText, CardHeader, Alert
 } from 'reactstrap';
 import ModalAddOrder from './ModalAddOrder';
 
@@ -11,10 +11,8 @@ const RemoveFromBasketButton = ({ id, basket, setBasket }) => {
 
         let tmp = basket;
         tmp.splice(removeIndex, 1)
-        console.log(tmp);
         setBasket(tmp);
         localStorage.setItem("basket", JSON.stringify(tmp));
-        window.location.reload();
     }
 
     return (
@@ -36,7 +34,7 @@ const BasketBody = ({ basket, setBasket }) => {
                 item.subtotal += price;
                 item.quantity += 1;
             } else {
-                item = new Object();
+                item = {};
                 item.name = name;
                 item.subtotal = price;
                 item.quantity = 1;
@@ -91,7 +89,7 @@ const Basket = () => {
 
         setLogged(logged);
         setBasket(basket);
-    }, []);
+    }, [basket]);
 
     useEffect(() => {
         setTotal(basket.reduce((sum, cur) => sum + cur.price, 0));
@@ -100,7 +98,6 @@ const Basket = () => {
     const clearBasket = () => {
         setBasket([]);
         localStorage.setItem("basket", []);
-        window.location.reload();
     }
 
     return (
