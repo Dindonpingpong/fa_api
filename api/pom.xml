@@ -4,12 +4,12 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.example</groupId>
-	<artifactId>polls</artifactId>
+	<artifactId>pizza</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>polls</name>
-	<description>Polling App built with Spring Boot, Spring Security, MySQL and JWT</description>
+	<name>pizza</name>
+	<description>Pizza app</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>

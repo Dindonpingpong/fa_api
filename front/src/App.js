@@ -9,6 +9,7 @@ import Profile from './components/Profile';
 import Stat from './components/Stat';
 import Products from './components/Products';
 import Orders from './components/Orders';
+import About from './components/About';
 
 const App = () => {
 
@@ -24,6 +25,7 @@ const App = () => {
           <Route path='/products' component={Products} />
           <Route path='/orders' component={Orders} />
           <Route path='/stat' component={Stat} />
+          <Route path='/about' component={About} />
           <Route path='*' component={Menu} />
         </Switch>
       </Router>

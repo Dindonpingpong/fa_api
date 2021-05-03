@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardBody, Container, Row, Col, Button, FormGroup, Label, Input, FormFeedback } from 'reactstrap';
 import { validateEmail, validateFirstName, validateLastName, validateLogin, validatePassword, validatePhone, validateAddress } from './../utils/validators';
-import { getCurrentUser } from './../utils/api';
+import { getCurrentUser, updateUser } from './../utils/api';
+import Info from './Info';
 
 const InputForm = ({ name, defaultValue, text, type, set, validate }) => {
     const [isValid, toggleValid] = useState('');
@@ -53,14 +54,14 @@ const Profile = () => {
     const [phone, setPhone] = useState();
     const [address, setAddress] = useState();
     const [password, setPassword] = useState();
+    const [defId, setId] = useState();
     const [defaultLogin, setDefaultLogin] = useState();
     const [defaultEmail, setDefaultEmail] = useState();
     const [defaultLastName, setDefaultLastName] = useState();
     const [defaultFirstName, setDefaultFirstName] = useState();
     const [defaultPhone, setDefaultPhone] = useState();
     const [defaultAddress, setDefaultAddress] = useState();
-    const [defaultMessage, setDefaultMessage] = useState();
-    const [isSuccess, setSuccess] = useState();
+    const [message, setMessage] = useState();
 
     useEffect(() => {
 
@@ -68,8 +69,9 @@ const Profile = () => {
             const res = await getCurrentUser();
 
             if (res.status === 200) {
-                const { username, firstName, lastName, email, address, phone } = res.data;
+                const { id, username, firstName, lastName, email, address, phone } = res.data;
 
+                setId(id);
                 setDefaultLogin(username);
                 setDefaultFirstName(firstName);
                 setDefaultLastName(lastName);
@@ -80,15 +82,37 @@ const Profile = () => {
         };
 
         getInfo();
-    }, []);
+    }, [message]);
 
-    const submit = async () => { 
-        
+    const submit = async () => {
+        const user = {
+            firstName: firstName || defaultFirstName,
+            lastName: lastName || defaultLastName,
+            username: login || defaultLogin,
+            email: email || defaultEmail,
+            address: address || defaultAddress,
+            phone: phone || defaultPhone,
+            password: password || null
+        }
+
+        const res = await updateUser(defId, user);
+
+        if (res.status === 200) {
+            setMessage("Профиль обновлен")
+        }
     };
 
     return (
         <section className="login">
             <Container>
+                {
+                    message &&
+                    <Row>
+                        <Col>
+                            <Info message={message} setMessage={setMessage} isSuccess={true} />
+                        </Col>
+                    </Row>
+                }
                 <Row>
                     <Col md={6} className="m-auto">
                         <Card className="mb-4 shadow-sm">
