@@ -14,6 +14,7 @@ public class MenuResponse {
     private String name;
     private Integer price;
     private Integer weight;
+    private String image;
     private boolean status;
     private List<ProductResponse> productResponseList;
 }

@@ -31,7 +31,7 @@ const Filter = ({ content, setFilteredContent, isAdmin, allProducts, setMessage 
         let sortFunc;
 
         if (content) {
-            filtered = content.filter((item) => item.name.toLowerCase().includes(search));
+            filtered = content.filter((item) => item.name.toLowerCase().includes(search))
 
             switch (sortOption) {
                 case "priceAsc":
@@ -181,7 +181,7 @@ const AdditionalInfo = ({ basket, setBasket, id, name, price, weight, products, 
     if (isAdmin && !status) {
         additionalInfo = <DeleteMenuButton id={id} setMessage={setMessage} />;
     } else if (isAdmin && status) {
-        additionalInfo = <RestoreMenuButton id={id} setMessage={setMessage}/>;
+        additionalInfo = <RestoreMenuButton id={id} setMessage={setMessage} />;
     } else if (!status) {
         additionalInfo = <Button onClick={addToBasket} block>Добавить в корзину</Button>;
     } else {
@@ -215,11 +215,10 @@ const MenuCards = ({ content, basket, setBasket, isAdmin, setMessage, allProduct
         listItems = content.map((menu, item) => {
             const { id, name, price, weight, status, image, productResponseList } = menu;
 
-            const mock_img = "https://img.freepik.com/free-vector/cute-pizza-cartoon-vector-icon-illustration-fast-food-icon-concept-flat-cartoon-style_138676-2588.jpg?size=338&ext=jpg";
             return (
                 <Col md={3} key={item}>
                     <Card className="mb-4 text-center">
-                        <CardImg top src={mock_img} alt={name} />
+                        <CardImg top src={image} alt={name} />
                         <CardBody>
                             <CardTitle>
                                 {name} <Badge color="danger" pill> {price}р </Badge>
@@ -256,6 +255,7 @@ const MenuCards = ({ content, basket, setBasket, isAdmin, setMessage, allProduct
 const Menu = () => {
     const [isAdmin, setAdmin] = useState();
     const [basket, setBasket] = useState([]);
+    const [content, setContent] = useState([]);
     const [filteredContent, setFilteredContent] = useState();
     const [allProducts, setAllProducts] = useState();
     const [message, setMessage] = useState();
@@ -288,7 +288,7 @@ const Menu = () => {
             }
 
             if (resMenu.status === 200) {
-                setFilteredContent(resMenu.data)
+                setContent(resMenu.data)
             }
         }
 
@@ -300,7 +300,7 @@ const Menu = () => {
             <Container>
                 <Filter
                     isAdmin={isAdmin}
-                    content={filteredContent}
+                    content={content}
                     setFilteredContent={setFilteredContent}
                     allProducts={allProducts}
                     setMessage={setMessage}
