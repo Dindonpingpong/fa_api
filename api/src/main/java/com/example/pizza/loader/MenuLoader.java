@@ -12,7 +12,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-//@Component
+@Component
 public class MenuLoader implements CommandLineRunner {
     private final MenuRepository menuRepository;
     private final ProductRepository productRepository;
@@ -24,9 +24,12 @@ public class MenuLoader implements CommandLineRunner {
     }
 
     public void run(String... args) {
-        Menu menuFirst = new Menu("Маргарита", 345, 620, false),
-                menuSecond = new Menu("Пепперони", 395, 570, false),
-                menuThird = new Menu("Ветчина и грибы", 345, 600, false);
+        Menu menuFirst = new Menu("Маргарита", 345, 620, false,
+                "https://dodopizza-a.akamaihd.net/static/Img/Products/e8a8ded1f8154d11ab5065dc5208b187_584x584.jpeg"),
+                menuSecond = new Menu("Пепперони", 395, 570, false,
+                        "https://dodopizza-a.akamaihd.net/static/Img/Products/Pizza/ru-RU/4e630ad6-e12e-4d52-ac4c-a7edb799c0fa.jpg"),
+                menuThird = new Menu("Ветчина и грибы", 345, 600, false,
+                        "https://dodopizza-a.akamaihd.net/static/Img/Products/26fa2948b6c74113afb9d09a3262fc26_584x584.jpeg");
         Product productOne = new Product("Пепперони"),
                 productTwo = new Product("Ветчина"),
                 productThird = new Product("Томат"),

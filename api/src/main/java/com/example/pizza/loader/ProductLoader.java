@@ -6,8 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
-//@Component
+@Component
 public class ProductLoader implements CommandLineRunner {
+
     private final ProductRepository productRepository;
 
     @Autowired
@@ -16,7 +17,7 @@ public class ProductLoader implements CommandLineRunner {
     }
 
     @Override
-    public void run(String... args) {
+    public void run(String... args) throws Exception {
         this.productRepository.save(new Product("Пепперони"));
         this.productRepository.save(new Product("Ветчина"));
         this.productRepository.save(new Product("Моцарелла"));

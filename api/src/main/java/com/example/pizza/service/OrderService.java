@@ -1,7 +1,10 @@
 package com.example.pizza.service;
 
 import com.example.pizza.model.*;
-import com.example.pizza.payload.*;
+import com.example.pizza.payload.EmployeeResponse;
+import com.example.pizza.payload.OrderMenuResponse;
+import com.example.pizza.payload.OrderRequest;
+import com.example.pizza.payload.OrderResponse;
 import com.example.pizza.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -10,9 +13,6 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-
-import static org.springframework.http.HttpStatus.CONFLICT;
-import static org.springframework.http.HttpStatus.CREATED;
 
 @Service
 public class OrderService {
@@ -32,35 +32,29 @@ public class OrderService {
     @Autowired
     Order_ItemsRepository order_itemsRepository;
 
+    public void createOrder(OrderRequest orderRequest) {
+        Client client = userRepository.getOne(orderRequest.getClientId());
 
-    public ResponseEntity<?> createOrder(OrderRequest orderRequest) {
-        try {
-            Client client = userRepository.getOne(orderRequest.getClientId());
+        Order order = new Order(orderRequest.getOrderDate(), orderRequest.getAddress(), orderRequest.getPhone());
 
-            Order order = new Order(orderRequest.getOrderDate(), orderRequest.getAddress(), orderRequest.getPhone());
+        client.addOrderItem(order);
+        order.setClient(client);
+        userRepository.save(client);
 
-            client.addOrderItem(order);
-            order.setClient(client);
-            userRepository.save(client);
+        List<Order_items> orderItems = new LinkedList<>();
 
-            List<Order_items> orderItems = new LinkedList<>();
+        orderRequest.getOrderMenuRequestList().forEach(menuOrder -> {
+            Menu curMenu = menuRepository.getOne(menuOrder.getId());
+            Order_items order_item = new Order_items(curMenu, order, menuOrder.getQuantity(), menuOrder.getSubtotal());
+            curMenu.addOrderItem(order_item);
+            menuRepository.save(curMenu);
+            orderItems.add(order_item);
+        });
 
-            orderRequest.getOrderMenuRequestList().forEach(menuOrder -> {
-                Menu curMenu = menuRepository.getOne(menuOrder.getId());
-                Order_items order_item = new Order_items(curMenu, order, menuOrder.getQuantity(), menuOrder.getSubtotal());
-                curMenu.addOrderItem(order_item);
-                menuRepository.save(curMenu);
-                orderItems.add(order_item);
-            });
+        order.setOrder_itemsSet(orderItems);
 
-            order.setOrder_itemsSet(orderItems);
-
-            orderRepository.save(order);
-            order_itemsRepository.saveAll(orderItems);
-            return new ResponseEntity<>(new ApiResponse(true, "Order created"), CREATED);
-        } catch (Exception e) {
-            return new ResponseEntity<>(new ApiResponse(false, e.getMessage()), CONFLICT);
-        }
+        orderRepository.save(order);
+        order_itemsRepository.saveAll(orderItems);
     }
 
     public List<OrderResponse> getAllOrders() {
@@ -116,6 +110,13 @@ public class OrderService {
         employee.addOrder(order);
         order.setEmployee(employee);
         employeeRepository.save(employee);
+        orderRepository.save(order);
+    }
+
+    public void updateStatusOrder(long orderId, String status) {
+        Order order = orderRepository.getOne(orderId);
+
+        order.setStatus(status);
         orderRepository.save(order);
     }
 }

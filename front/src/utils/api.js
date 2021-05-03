@@ -6,7 +6,7 @@ const request = (options) => {
         'Content-Type': 'application/json',
     })
 
-    if (localStorage.getItem(ACCESS_TOKEN)) {
+    if (localStorage.getItem(ACCESS_TOKEN) && localStorage.getItem(ACCESS_TOKEN) !== 'null') {
         headers.append('Authorization', 'Bearer ' + localStorage.getItem(ACCESS_TOKEN))
     }
 
@@ -43,6 +43,14 @@ export const signup = (signupRequest) => {
         url: API_BASE_URL + "/auth/signup",
         method: 'POST',
         body: JSON.stringify(signupRequest)
+    });
+}
+
+export const updateUser = (userId, userRequest) => {
+    return request({
+        url: API_BASE_URL + "/user/" + userId,
+        method: 'PUT',
+        body: JSON.stringify(userRequest)
     });
 }
 
@@ -86,6 +94,13 @@ export const createProduct = (orderRequest) => {
     });
 }
 
+export const deleteProduct = (productId) => {
+    return request({
+        url: API_BASE_URL + "/product/" + productId,
+        method: 'DELETE'
+    });
+}
+
 export const getAllMenu = () => {
     return request({
         url: API_BASE_URL + "/menu/all",
@@ -97,6 +112,13 @@ export const deleteMenu = (id) => {
     return request({
         url: API_BASE_URL + "/menu/" + id,
         method: "DELETE"
+    })
+}
+
+export const restoreMenu = (id) => {
+    return request({
+        url: `${API_BASE_URL}/menu/${id}/restore`,
+        method: "PUT"
     })
 }
 
@@ -121,5 +143,40 @@ export const createOrder = (orderRequest) => {
         url: API_BASE_URL + "/order",
         method: 'POST',
         body: JSON.stringify(orderRequest)
+    });
+}
+
+export const deleteOrder = (orderId) => {
+    return request({
+        url: API_BASE_URL + "/order" + orderId,
+        method: 'DELETE'
+    });
+}
+
+export const updateOrderStatus = (orderId, status) => {
+    return request({
+        url: `${API_BASE_URL}/order/status/${orderId}/${status}`,
+        method: 'PUT'
+    });
+}
+
+export const getAllOrders = () => {
+    return request({
+        url: API_BASE_URL + "/order/all",
+        method: 'GET'
+    });
+}
+
+export const getAllEmployees = () => {
+    return request({
+        url: API_BASE_URL + "/employee/all",
+        method: 'GET'
+    });
+}
+
+export const addEmployeeToOrder = (orderId, employeeId) => {
+    return request({
+        url: `${API_BASE_URL}/order/${orderId}/${employeeId}`,
+        method: 'PUT'
     });
 }

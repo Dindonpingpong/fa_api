@@ -1,21 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Col, Input, Label } from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter, Input, Label } from 'reactstrap';
 import InputForm from './InputForm';
+import { updateMenu } from './../utils/api';
 
-const ModalAddRedactMenu = ({ defaultName, defaultPrice, defaultWeight, defaultProducts, clearBasket, allProducts }) => {
+const ModalAddRedactMenu = ({ id, defaultName, defaultPrice, defaultWeight, defaultProducts, allProducts, setMessage }) => {
     const [modal, setModal] = useState(false);
-    const [chosenProducts, setProducts] = useState();
+    const [chosenProducts, setProducts] = useState([]);
     const [defaultChosen, setChosen] = useState();
     const [name, setName] = useState(defaultName);
     const [price, setPrice] = useState(defaultPrice);
     const [weight, setWeight] = useState(defaultWeight);
     const toggle = () => setModal(!modal);
     let listProducts = [];
-
-    const order = () => {
-        toggle();
-        clearBasket();
-    }
 
     useEffect(() => {
         const set = async () => {
@@ -45,8 +41,31 @@ const ModalAddRedactMenu = ({ defaultName, defaultPrice, defaultWeight, defaultP
         setProducts(opts);
     }
 
+    const update = async () => {
+        let productList;
+
+        if (chosenProducts.length === 0)
+            productList = defaultProducts.map((item) => parseInt(item))
+        else
+            productList = chosenProducts.map((item) => parseInt(item))
+
+        const menuRequest = {
+            name: name,
+            price: parseInt(price),
+            weight: parseInt(weight),
+            productList: productList
+        }
+
+        const res = await updateMenu(id, menuRequest);
+
+        if (res.status === 200) {
+            setMessage("Блюдо в меню обновлено");
+            toggle();
+        }
+    }
+
     return (
-        <Col>
+        <div>
             <Button onClick={toggle} color="success" block>Редактировать</Button>
             <Modal isOpen={modal} toggle={toggle}>
                 <ModalHeader toggle={toggle} />
@@ -61,10 +80,10 @@ const ModalAddRedactMenu = ({ defaultName, defaultPrice, defaultWeight, defaultP
 
                 </ModalBody>
                 <ModalFooter>
-                    <Button color="success" onClick={order}>Сохранить</Button>{' '}
+                    <Button color="success" onClick={update}>Сохранить</Button>{' '}
                 </ModalFooter>
             </Modal>
-        </Col>
+        </div>
     );
 }
 

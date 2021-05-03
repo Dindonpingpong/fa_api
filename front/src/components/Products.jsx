@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Container, Row, Col, Button, Table, Input } from 'reactstrap';
 import { getAllProducts } from './../utils/api';
 import Info from './Info';
-import { createProduct } from './../utils/api';
+import { createProduct, deleteProduct } from './../utils/api';
+import { CSVLink } from "react-csv";
 
 const ProductAddRow = ({ products, setMessage, setSuccess }) => {
     const [name, setName] = useState();
@@ -40,7 +41,6 @@ const Products = () => {
     const [success, setSuccess] = useState(true);
 
     useEffect(() => {
-
         const getProducts = async () => {
             const res = await getAllProducts();
 
@@ -52,11 +52,21 @@ const Products = () => {
         getProducts();
     }, [message]);
 
-    const listProducts = products.map((products) => <tr>
-        <th scope="row">{products.id}</th>
-        <td>{products.name}</td>
-        <td><Button color='danger'>Удалить</Button></td>
-    </tr>)
+    const submit = async (e) => {
+        const res = await deleteProduct(e.target.id);
+
+        if (res.status === 200) {
+            setSuccess(true);
+            setMessage("Продукт удален");
+        }
+    };
+
+    const listProducts = products.map(({ id, name }) =>
+        <tr key={id}>
+            <th scope="row">{id}</th>
+            <td>{name}</td>
+            <td><input className="btn btn-danger" id={id} type="button" value="Удалить" onClick={submit} /></td>
+        </tr>)
 
     return (
         <section className="login">
@@ -77,9 +87,8 @@ const Products = () => {
                                 <tr>
                                     <th>#</th>
                                     <th>Product name</th>
-
                                     <th>
-                                        <Button>Выгрузить в excel</Button>
+                                        <CSVLink data={products}>Выгрузить в excel</CSVLink>
                                     </th>
                                 </tr>
                                 <ProductAddRow products={products} setMessage={setMessage} setSuccess={setSuccess} />

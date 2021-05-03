@@ -25,6 +25,7 @@ public class Menu {
     private Integer price;
     private Integer weight;
     private boolean status;
+    private String image;
     @ManyToMany(fetch = LAZY)
     @JoinTable(
             name = "menu_product",
@@ -35,11 +36,12 @@ public class Menu {
     public Menu() {
     }
 
-    public Menu(String name, Integer price, Integer weight, boolean status) {
+    public Menu(String name, Integer price, Integer weight, boolean status, String image) {
         this.name = name;
         this.price = price;
         this.weight = weight;
         this.status = status;
+        this.image = image;
     }
 
     public void deleteProduct(Product product) {

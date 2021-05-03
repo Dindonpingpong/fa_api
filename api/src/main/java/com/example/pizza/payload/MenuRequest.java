@@ -14,5 +14,5 @@ public class MenuRequest {
     private Integer price;
     private Integer weight;
     private boolean status;
-    private List<ProductResponse> productResponseList;
+    private List<Long> productList;
 }

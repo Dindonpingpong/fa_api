@@ -87,7 +87,6 @@ public class AuthController {
                     BAD_REQUEST);
         }
 
-        // Creating user's account
         Client client = new Client(signUpRequest.getFirstName(), signUpRequest.getLastName() , signUpRequest.getUsername(), signUpRequest.getPhone(),
                 signUpRequest.getEmail(), signUpRequest.getAddress(), signUpRequest.getPassword());
 

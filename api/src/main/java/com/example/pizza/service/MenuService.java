@@ -81,10 +81,11 @@ public class MenuService {
     }
 
     public void createMenu(MenuRequest menuRequest) {
-        Menu menu = new Menu(menuRequest.getName(), menuRequest.getPrice(), menuRequest.getWeight(), menuRequest.isStatus());
-        if (menuRequest.getProductResponseList() != null) {
+        Menu menu = new Menu(menuRequest.getName(), menuRequest.getPrice(), menuRequest.getWeight(), menuRequest.isStatus(),
+                "https://img.freepik.com/free-vector/cute-pizza-cartoon-vector-icon-illustration-fast-food-icon-concept-flat-cartoon-style_138676-2588.jpg?size=338&ext=jpg");
+        if (menuRequest.getProductList() != null) {
             List<Product> listProduct = new ArrayList<>();
-            menuRequest.getProductResponseList().forEach(product -> listProduct.add(productRepository.getOne(product.getId())));
+            menuRequest.getProductList().forEach(product -> listProduct.add(productRepository.getOne(product)));
             menu.addProduct(listProduct);
         }
         menuRepository.save(menu);
@@ -103,4 +104,16 @@ public class MenuService {
         }
     }
 
+    public ApiResponse restoreItemMenuStatus(Long Id) {
+        Optional<Menu> menuFromDb = menuRepository.findById(Id);
+
+        if (menuFromDb.isPresent()) {
+            Menu updatedMenu = menuFromDb.get();
+            updatedMenu.setStatus(false);
+            menuRepository.save(updatedMenu);
+            return new ApiResponse(true, "Menu item restores");
+        } else {
+            return new ApiResponse(false, "Menu item not found");
+        }
+    }
 }

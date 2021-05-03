@@ -3,9 +3,10 @@ import {
     Card, CardBody, Container, Row, Col, Button, ListGroup,
     ListGroupItem, Badge, CardTitle, CardFooter, CardText, CardHeader, Alert
 } from 'reactstrap';
+import Info from './Info';
 import ModalAddOrder from './ModalAddOrder';
 
-const RemoveFromBasketButton = ({ id, basket, setBasket }) => {
+const RemoveFromBasketButton = ({ id, basket, setBasket, setMessage }) => {
     const handle = () => {
         let removeIndex = basket.map((item) => item.id).indexOf(id);
 
@@ -13,6 +14,7 @@ const RemoveFromBasketButton = ({ id, basket, setBasket }) => {
         tmp.splice(removeIndex, 1)
         setBasket(tmp);
         localStorage.setItem("basket", JSON.stringify(tmp));
+        setMessage("Корзина изменена");
     }
 
     return (
@@ -20,7 +22,7 @@ const RemoveFromBasketButton = ({ id, basket, setBasket }) => {
     );
 }
 
-const BasketBody = ({ basket, setBasket }) => {
+const BasketBody = ({ basket, setBasket, setMessage }) => {
     let listItems = [];
     let mapItems = new Map();
 
@@ -56,6 +58,7 @@ const BasketBody = ({ basket, setBasket }) => {
                             id={key}
                             basket={basket}
                             setBasket={setBasket}
+                            setMessage={setMessage}
                         />
                     </Col>
                 </Row>
@@ -76,6 +79,7 @@ const Basket = () => {
     const [isLogged, setLogged] = useState();
     const [basket, setBasket] = useState([]);
     const [total, setTotal] = useState(0);
+    const [message, setMessage] = useState();
 
     useEffect(() => {
         const logged = (localStorage.getItem('isLogged') === 'true') ? true : false;
@@ -89,11 +93,11 @@ const Basket = () => {
 
         setLogged(logged);
         setBasket(basket);
-    }, [basket]);
+    }, [setBasket, message]);
 
     useEffect(() => {
         setTotal(basket.reduce((sum, cur) => sum + cur.price, 0));
-    }, [basket])
+    }, [setBasket, message])
 
     const clearBasket = () => {
         setBasket([]);
@@ -103,6 +107,14 @@ const Basket = () => {
     return (
         <section className="login">
             <Container>
+                {
+                    message &&
+                    <Row>
+                        <Col>
+                            <Info message={message} setMessage={setMessage} isSuccess={true} />
+                        </Col>
+                    </Row>
+                }
                 <Row>
                     <Col md={12} className="m-auto">
                         <Card className="mb-4 shadow-sm">
@@ -117,6 +129,7 @@ const Basket = () => {
                             <BasketBody
                                 basket={basket}
                                 setBasket={setBasket}
+                                setMessage={setMessage}
                             />
                             <CardFooter className="text-muted">
                                 <Row>

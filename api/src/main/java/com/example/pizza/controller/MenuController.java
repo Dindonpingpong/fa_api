@@ -59,4 +59,9 @@ public class MenuController {
         return new ResponseEntity<>(menuService.updateItemMenuStatus(id), OK);
     }
 
+    @PutMapping("/{id}/restore")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> restoreItemMenu(@PathVariable long id) {
+        return new ResponseEntity<>(menuService.restoreItemMenuStatus(id), OK);
+    }
 }

@@ -33,7 +33,7 @@ public class Order {
         this.orderDate = orderDate;
         this.phone = phone;
         this.address = address;
-        this.status = "ordered";
+        this.status = "заказан";
     }
 
     @ManyToOne(fetch = FetchType.EAGER)

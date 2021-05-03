@@ -20,7 +20,6 @@ const ModalAddOrder = ({ basket, clearBasket }) => {
                 setDefaultPhone(res.data.phone);
                 setDefaultAdress(res.data.address);
                 setId(res.data.id)
-                console.log(res);
             }
         }
 
