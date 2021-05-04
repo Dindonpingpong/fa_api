@@ -1,5 +1,8 @@
 package com.example.pizza.payload;
 
+/**
+ * Формат тела запроса на получение доступноси логина
+ */
 public class UserIdentityAvailability {
     private Boolean available;
 

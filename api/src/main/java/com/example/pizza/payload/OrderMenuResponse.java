@@ -4,6 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * Формат тела ответа сущности заказа товара
+ */
 @Getter
 @Setter
 @AllArgsConstructor

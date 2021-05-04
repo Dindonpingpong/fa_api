@@ -6,6 +6,9 @@ import lombok.Setter;
 
 import java.util.List;
 
+/**
+ * Формат тела ответа сущности Меню
+ */
 @Setter
 @Getter
 @AllArgsConstructor

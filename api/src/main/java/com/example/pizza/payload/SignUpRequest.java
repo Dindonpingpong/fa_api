@@ -3,6 +3,9 @@ package com.example.pizza.payload;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * Формат тела запроса на регистрацию
+ */
 @Setter
 @Getter
 public class SignUpRequest {

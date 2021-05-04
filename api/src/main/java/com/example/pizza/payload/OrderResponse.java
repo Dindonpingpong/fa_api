@@ -7,6 +7,9 @@ import lombok.Setter;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * Формат тела ответа сущности заказ
+ */
 @Setter
 @Getter
 @AllArgsConstructor

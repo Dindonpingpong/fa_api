@@ -4,6 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * Формат тела ответа данных о пользователе
+ */
 @Setter
 @Getter
 @AllArgsConstructor
