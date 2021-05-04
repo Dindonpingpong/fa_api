@@ -7,6 +7,9 @@ import javax.persistence.*;
 
 import static javax.persistence.FetchType.EAGER;
 
+/**
+ * Соединительая таблица заказов и меню
+ */
 @Entity
 @Table(name = "order_items")
 @Getter

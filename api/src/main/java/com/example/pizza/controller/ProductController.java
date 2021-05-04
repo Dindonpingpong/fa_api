@@ -15,6 +15,9 @@ import java.util.List;
 
 import static org.springframework.http.HttpStatus.*;
 
+/**
+ * Контроллер продуктов
+ */
 @RestController
 @RequestMapping("/api/product")
 public class ProductController {
@@ -22,6 +25,11 @@ public class ProductController {
     @Autowired
     ProductService productService;
 
+    /**
+     * Обработчик запроса на создание продукта
+     * @param productRequest
+     * @return
+     */
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> createProduct(@RequestBody ProductRequest productRequest) {
@@ -33,17 +41,32 @@ public class ProductController {
         }
     }
 
+    /**
+     * Обработчик получения всех продуктов
+     * @return
+     */
     @GetMapping("/all")
     public List<ProductResponse> getProducts() {
         return productService.getAllProducts();
     }
 
+    /**
+     * Обновление информации продукта
+     * @param id
+     * @param name
+     * @return
+     */
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> updateProduct(@PathVariable long id, @RequestBody String name) {
         return new ResponseEntity<>(productService.updateProduct(name, id), OK);
     }
 
+    /**
+     * Удаление продукта (hard-delete)
+     * @param id
+     * @return
+     */
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> deleteProduct(@PathVariable long id) {

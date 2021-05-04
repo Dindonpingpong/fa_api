@@ -6,6 +6,9 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+/**
+ * Лоадер для генерации пользователей
+ */
 @Component
 public class UserLoader implements CommandLineRunner {
 

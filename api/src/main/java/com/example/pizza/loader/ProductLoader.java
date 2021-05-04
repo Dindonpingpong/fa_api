@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+/**
+ * Лоадер для генерации продуктов
+ */
 @Component
 public class ProductLoader implements CommandLineRunner {
 

@@ -8,6 +8,9 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 
+/**
+ * Лоадер для генерации сотрудников
+ */
 @Component
 public class EmployeeLoader implements CommandLineRunner {
 

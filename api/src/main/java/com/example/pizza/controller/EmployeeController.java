@@ -13,6 +13,9 @@ import java.util.List;
 
 import static org.springframework.http.HttpStatus.*;
 
+/**
+ * Контроллер сотрудников
+ */
 @RestController
 @RequestMapping("/api/employee")
 @PreAuthorize("hasRole('ADMIN')")
@@ -20,6 +23,11 @@ public class EmployeeController {
     @Autowired
     EmployeeService employeeService;
 
+    /**
+     * Запрос на создания сотрудника
+     * @param employeeRequest
+     * @return
+     */
     @PostMapping
     public ResponseEntity<?> createEmployee(@RequestBody EmployeeRequest employeeRequest) {
         try {
@@ -30,6 +38,10 @@ public class EmployeeController {
         }
     }
 
+    /**
+     * Запрос на получение всех сотрудников
+     * @return
+     */
     @GetMapping("/all")
     public List<EmployeeResponse> getEmployees() {
         return employeeService.getAllEmployees();

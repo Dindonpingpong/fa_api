@@ -6,6 +6,9 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Set;
 
+/**
+ * Таблица с сотрудниками
+ */
 @Entity
 @Table(name = "employee")
 public class Employee {

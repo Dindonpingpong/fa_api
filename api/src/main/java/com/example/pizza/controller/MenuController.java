@@ -14,6 +14,9 @@ import java.util.List;
 
 import static org.springframework.http.HttpStatus.*;
 
+/**
+ * Контроллер раздела Меню
+ */
 @RestController
 @RequestMapping("/api/menu")
 public class MenuController {
@@ -26,12 +29,23 @@ public class MenuController {
         return menuService.getAllMenu();
     }
 
+    /**
+     * Обновление информации у меню
+     * @param id
+     * @param menuRequest
+     * @return
+     */
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> updateMenu(@PathVariable long id, @RequestBody MenuRequest menuRequest) {
         return new ResponseEntity<>(menuService.updateMenu(id, menuRequest), OK);
     }
 
+    /**
+     * Добавление в меню нового товара
+     * @param menuRequest
+     * @return
+     */
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> addNewItemMenu(@RequestBody MenuRequest menuRequest) {
@@ -43,12 +57,22 @@ public class MenuController {
         }
     }
 
+    /**
+     * Удаление товара из меню (soft-delete)
+     * @param id
+     * @return
+     */
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> deleteItemMenu(@PathVariable long id) {
         return new ResponseEntity<>(menuService.updateItemMenuStatus(id), OK);
     }
 
+    /**
+     * Восстановление товара в меню
+     * @param id
+     * @return
+     */
     @PutMapping("/{id}/restore")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> restoreItemMenu(@PathVariable long id) {

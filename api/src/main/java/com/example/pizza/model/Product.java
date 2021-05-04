@@ -8,6 +8,9 @@ import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Таблица продуктов
+ */
 @Entity
 @Table(name = "product")
 @Setter

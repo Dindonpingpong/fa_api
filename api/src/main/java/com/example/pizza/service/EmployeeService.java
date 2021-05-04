@@ -9,6 +9,9 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Сервис взаимодействия с сотрудниками
+ */
 @Service
 public class EmployeeService {
 

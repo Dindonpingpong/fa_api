@@ -17,6 +17,9 @@ import org.springframework.web.bind.annotation.*;
 import static org.springframework.http.HttpStatus.CONFLICT;
 import static org.springframework.http.HttpStatus.OK;
 
+/**
+ * Контроллер пользователей
+ */
 @RestController
 @RequestMapping("/api")
 public class UserController {
@@ -29,6 +32,11 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
+    /**
+     * Получение всех сведений о себе за исключением пароля
+     * @param currentUser
+     * @return
+     */
     @GetMapping("/user/me")
     @PreAuthorize("hasRole('USER')")
     public UserSummary getCurrentUser(@CurrentUser UserPrincipal currentUser) {
@@ -38,29 +46,34 @@ public class UserController {
         return userSummary;
     }
 
+    /**
+     * Проверка на существования логина в БД
+     * @param username
+     * @return
+     */
     @GetMapping("/user/checkUsernameAvailability")
     public UserIdentityAvailability checkUsernameAvailability(@RequestParam(value = "username") String username) {
         Boolean isAvailable = !userRepository.existsByUsername(username);
         return new UserIdentityAvailability(isAvailable);
     }
 
+    /**
+     * Проверка на существования почты в БД
+     * @param email
+     * @return
+     */
     @GetMapping("/user/checkEmailAvailability")
     public UserIdentityAvailability checkEmailAvailability(@RequestParam(value = "email") String email) {
         Boolean isAvailable = !userRepository.existsByEmail(email);
         return new UserIdentityAvailability(isAvailable);
     }
 
-    @GetMapping("/users/{username}")
-    public UserProfile getUserProfile(@PathVariable(value = "username") String username) {
-        Client client = userRepository.findByUsername(username)
-                .orElseThrow(() -> new ResourceNotFoundException("User", "username", username));
-
-
-        UserProfile userProfile = new UserProfile(client.getId(), client.getUsername(), client.getFirstName(), client.getCreatedAt());
-
-        return userProfile;
-    }
-
+    /**
+     * Обновление информации о пользователе
+     * @param id
+     * @param signUpRequest
+     * @return
+     */
     @PutMapping("/user/{id}")
     public ResponseEntity<?> updateUserProfile(@PathVariable long id, @RequestBody SignUpRequest signUpRequest) {
         try {

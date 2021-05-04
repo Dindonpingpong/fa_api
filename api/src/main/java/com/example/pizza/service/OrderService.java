@@ -14,6 +14,9 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * Сервис взаимодействия с заказами
+ */
 @Service
 public class OrderService {
 

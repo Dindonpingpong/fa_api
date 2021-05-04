@@ -6,6 +6,9 @@ import lombok.Setter;
 
 import java.time.LocalDateTime;
 
+/**
+ * Формат тела запроса сущности сотрудник
+ */
 @Setter
 @Getter
 @AllArgsConstructor

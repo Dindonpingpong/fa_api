@@ -11,6 +11,9 @@ import java.util.Set;
 
 import static javax.persistence.FetchType.LAZY;
 
+/**
+ * Таблица меню
+ */
 @Entity
 @Table(name = "menu")
 @Getter

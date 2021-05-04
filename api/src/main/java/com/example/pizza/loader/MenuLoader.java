@@ -12,6 +12,9 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Лоадер для генерации меню
+ */
 @Component
 public class MenuLoader implements CommandLineRunner {
     private final MenuRepository menuRepository;

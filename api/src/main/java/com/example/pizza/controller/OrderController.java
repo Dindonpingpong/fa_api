@@ -14,6 +14,9 @@ import java.util.List;
 import static org.springframework.http.HttpStatus.CONFLICT;
 import static org.springframework.http.HttpStatus.CREATED;
 
+/**
+ * Контроллер заказов
+ */
 @RestController
 @RequestMapping("/api/order")
 public class OrderController {

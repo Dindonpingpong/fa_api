@@ -6,6 +6,9 @@ import lombok.Setter;
 
 import java.util.List;
 
+/**
+ * Формат тела ответа авторизации
+ */
 @Setter
 @Getter
 @AllArgsConstructor

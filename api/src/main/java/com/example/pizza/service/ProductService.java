@@ -13,6 +13,9 @@ import java.util.List;
 import java.util.Optional;
 
 
+/**
+ * Сервис взаимодействия с продуктами
+ */
 @Service
 public class ProductService {
 

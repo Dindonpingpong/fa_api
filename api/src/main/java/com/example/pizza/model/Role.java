@@ -5,6 +5,9 @@ import lombok.Setter;
 import org.hibernate.annotations.NaturalId;
 import javax.persistence.*;
 
+/**
+ * Таблица ролей пользователей
+ */
 @Entity
 @Table(name = "roles")
 @Setter

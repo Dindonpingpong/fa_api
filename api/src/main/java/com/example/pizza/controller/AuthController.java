@@ -31,6 +31,9 @@ import java.util.List;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
+/**
+ * Контроллер аутентифицаии
+ */
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -50,6 +53,11 @@ public class AuthController {
     @Autowired
     JwtTokenProvider tokenProvider;
 
+    /**
+     * Авторизация пользователя
+     * @param loginRequest
+     * @return
+     */
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
 
@@ -75,6 +83,11 @@ public class AuthController {
         return ResponseEntity.ok(new JwtAuthenticationResponse(jwt, roles));
     }
 
+    /**
+     * Регистрация пользователя
+     * @param signUpRequest
+     * @return
+     */
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@RequestBody SignUpRequest signUpRequest) {
         if(userRepository.existsByUsername(signUpRequest.getUsername())) {
