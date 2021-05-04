@@ -288,7 +288,8 @@ const Menu = () => {
             }
 
             if (resMenu.status === 200) {
-                setContent(resMenu.data)
+                setContent(resMenu.data);
+                setFilteredContent(resMenu.data);
             }
         }
 
