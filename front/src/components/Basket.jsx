@@ -78,8 +78,9 @@ const BasketBody = ({ basket, setBasket, setMessage }) => {
 const Basket = () => {
     const [isLogged, setLogged] = useState();
     const [basket, setBasket] = useState([]);
-    const [total, setTotal] = useState(0);
     const [message, setMessage] = useState();
+
+    let total = basket.reduce((sum, cur) => sum + cur.price, 0);
 
     useEffect(() => {
         const logged = (localStorage.getItem('isLogged') === 'true') ? true : false;
@@ -94,10 +95,6 @@ const Basket = () => {
         setLogged(logged);
         setBasket(basket);
     }, [setBasket, message]);
-
-    useEffect(() => {
-        setTotal(basket.reduce((sum, cur) => sum + cur.price, 0));
-    }, [setBasket, message])
 
     const clearBasket = () => {
         setBasket([]);
