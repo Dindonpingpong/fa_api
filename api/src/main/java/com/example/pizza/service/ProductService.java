@@ -25,6 +25,10 @@ public class ProductService {
     @Autowired
     private MenuRepository menuRepository;
 
+    /**
+     * Создание продукта
+     * @param product объекта класс Product
+     */
     public void createProduct(Product product) {
         productRepository.save(product);
     }
